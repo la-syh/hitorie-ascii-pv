@@ -26,7 +26,9 @@ make check     # verifies ffmpeg, packages, input files (+ sha256), fonts
 make render    # -> out/pv.mp4   (1920x1080, 30 fps, H.264 + AAC stereo)
 ```
 
-The full render takes about 4–15 minutes, depending on the number of CPU cores.
+The full render takes about 4–15 minutes, depending on the number of CPU cores
+(4½ minutes with 3 workers on a 4-core arm64 Linux VM). The result is about
+190 MB (H.264 at roughly 6.7 Mbit/s, with AAC stereo audio).
 Frames are drawn in parallel worker processes and piped straight into FFmpeg,
 so no frame files are written to disk. The video is encoded in 20-second
 chunks, cached in `build/segments/<key>/`, and then joined and muxed with the
@@ -116,7 +118,9 @@ master of the song will still render, but the cuts may drift.
   frame. That is why frames can render in parallel and in any order, and why
   `still`, `render` and `play` all show the same picture. The font
   (BIZ UDGothic) and the Earth land mask are committed, and the analysis is
-  cached in `build/`.
+  cached in `build/`. As a check, stills rendered on two different machines
+  (x86-64 with Python 3.13 and NumPy 2.5, and arm64 with Python 3.10 and NumPy
+  2.2) came out bit-identical.
 * **Photosensitivity.** The PV flips between black and white on the beat.
   `tools/flash_check.py` measures the result at no more than 2.5 full-screen
   flashes in any one-second window, under the common 3-per-second guideline.
