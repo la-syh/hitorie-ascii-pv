@@ -4,9 +4,11 @@
 #   make check    verify tools, packages and the song/lyrics inputs
 #   make render   full PV  -> out/pv.mp4  (1920x1080, 30 fps)
 #
-# Uses .venv/bin/python when it exists, otherwise python3 (override: make PY=...).
+# Uses .venv/bin/python when it exists and can import numpy + Pillow, otherwise
+# python3 (override: make PY=...). A .venv built on another OS is ignored;
+# `make setup` rebuilds it from scratch.
 
-PY ?= $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python3)
+PY ?= $(shell .venv/bin/python -c "import numpy, PIL" >/dev/null 2>&1 && echo .venv/bin/python || echo python3)
 WORKERS ?=
 ARGS ?=
 W := $(if $(WORKERS),--workers $(WORKERS),) $(ARGS)
@@ -16,7 +18,7 @@ W := $(if $(WORKERS),--workers $(WORKERS),) $(ARGS)
 all: render
 
 setup:
-	python3 -m venv .venv
+	python3 -m venv --clear .venv
 	.venv/bin/python -m pip install --upgrade pip
 	.venv/bin/python -m pip install -r requirements.txt
 
