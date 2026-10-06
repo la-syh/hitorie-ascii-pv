@@ -1,0 +1,18 @@
+# Source media stays local: the recording and lyrics are copyrighted and large.
+*.flac
+*.wav
+*.mp3
+*.m4a
+*.lrc
+
+# generated
+build/
+out/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# os
+.DS_Store
