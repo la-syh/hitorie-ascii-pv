@@ -152,7 +152,8 @@ def _encode(frames_iter, cmd: list[str], f0: int, f1: int, t_start: float) -> No
 def cache_key(audio: Path, lrc: Path, fps: float, scale: float, crf: int, preset: str) -> str:
     """Hash of everything that affects the pixels: code, assets, inputs, settings."""
     h = hashlib.sha1()
-    for p in sorted((ROOT / "pv").glob("*.py")) + [ROOT / "assets" / "earth_mask.txt", lrc,
+    code = [p for p in sorted((ROOT / "pv").glob("*.py")) if p.name not in ("player.py", "__main__.py")]
+    for p in code + [ROOT / "assets" / "earth_mask.txt", lrc,
                                                      BUILD / "analysis.json"]:
         h.update(p.read_bytes())
     for p in sorted((ROOT / "assets" / "fonts").glob("*.ttf")):

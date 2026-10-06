@@ -73,7 +73,7 @@ def play(audio: Path, lrc: Path, fps: float = 30.0, start: float = 0.0, with_aud
     tw, th = shutil.get_terminal_size((COLS, ROWS))
     cols, rows = min(COLS, tw), min(ROWS, th - 1)
     if tw < COLS or th - 1 < ROWS:
-        print(f"note: terminal is {tw}x{th}; the PV is {COLS}x{ROWS} cells -- shrink the font "
+        print(f"note: terminal is {tw}x{th}; the PV needs {COLS}x{ROWS + 1} -- shrink the font "
               f"for the full picture. Showing the centre. (starting in 2 s)")
         time.sleep(2)
     proc = None
