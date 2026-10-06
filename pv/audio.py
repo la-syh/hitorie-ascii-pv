@@ -260,6 +260,6 @@ def analyze(audio: Path, video_fps: float, bpm_hint: float | None = None,
     )
     if verbose:
         print(f"duration {duration:.2f}s  bpm {an.bpm:.2f}  beats {len(beats)}  "
-              f"downbeat phase {downbeat_phase} {['%.2f' % p for p in phase_scores]}")
+              f"(auto downbeat guess: phase {downbeat_phase}; the storyboard uses its own anchor)")
         print("tempo candidates:", an.tempo_candidates)
     return an

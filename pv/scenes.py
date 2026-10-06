@@ -462,7 +462,7 @@ def sink(cv: Canvas, ctx: Ctx) -> Post:
         base(cv, m)
         M.room(cv, (0, 0, cv.W - 1, cv.H - 1), m.fg, m.mid, m.faint, t=t, tatami=True,
                window=True, wall_frame=True, night_window=False)
-        S.figure(cv, cv.W / 2, 47 * cv.aspect, 48, "stand", fg=m.fg)
+        S.figure(cv, cv.W / 2 + 24, 49 * cv.aspect, 52, "stand", fg=m.fg)
         p = post_for(m, ctx, vignette=0.2)
         stop = P["stop"]
         if t >= stop:
@@ -933,11 +933,11 @@ def finale(cv: Canvas, ctx: Ctx) -> Post:
     vx1 = fc[0] + (W - fc[0]) * s
     vy1 = fc[1] + (H - fc[1]) * s
     info = M.room(cv, (vx0, vy0, vx1, vy1), m.fg, m.mid, m.faint, t=t,
-                  frame_globe_lon=60 - 30 * ctx.lt, accent=m.accent, night_window=False,
+                  frame_globe_lon=140 - 24 * (t - end_hold), accent=m.accent, night_window=False,
                   frame_w=0.55, frame_h=0.8)
     if s < 2.2:
-        S.figure(cv, vx0 + (vx1 - vx0) * 0.66, (vy0 + (vy1 - vy0) * 0.86) * cv.aspect,
-                 (vy1 - vy0) * cv.aspect * 0.55, "sit", ph=t * 0.25, fg=m.fg)
+        S.figure(cv, vx0 + (vx1 - vx0) * 0.74, (vy0 + (vy1 - vy0) * 0.97) * cv.aspect,
+                 (vy1 - vy0) * cv.aspect * 0.5, "sit", ph=t * 0.25, fg=m.fg)
     p = post_for(m, ctx, vignette=0.4)
     ln = ctx.line()
     if ln is not None and t < end_hold:
