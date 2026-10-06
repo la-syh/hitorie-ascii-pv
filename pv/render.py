@@ -7,6 +7,8 @@ import os
 import subprocess
 import sys
 import time
+from collections import deque
+from itertools import islice
 from multiprocessing import get_context
 from pathlib import Path
 
@@ -104,6 +106,21 @@ def _work(frame: int) -> bytes:
     return _PV.frame(frame).tobytes()
 
 
+def _ordered(pool, items, window: int):
+    """Like pool.imap, but with at most ``window`` frames in flight, so fast
+    workers can't pile up gigabytes of finished frames ahead of the encoder."""
+    q: deque = deque()
+    it = iter(items)
+    for x in islice(it, window):
+        q.append(pool.apply_async(_work, (x,)))
+    while q:
+        res = q.popleft().get()
+        nxt = next(it, None)
+        if nxt is not None:
+            q.append(pool.apply_async(_work, (nxt,)))
+        yield res
+
+
 def _ffmpeg_video_cmd(W: int, H: int, fps: float, out: Path, crf: int, preset: str,
                       audio: Path | None = None, t0: float = 0.0, dur: float = 0.0) -> list[str]:
     cmd = ["ffmpeg", "-y", "-v", "error", "-nostats",
@@ -170,7 +187,7 @@ def render_video(audio: Path, lrc: Path, out: Path, fps: float = 30.0, scale: fl
         if pool is None:
             pool = get_context("spawn").Pool(workers, initializer=_init,
                                              initargs=(str(audio), str(lrc), fps, scale))
-        return pool.imap(_work, range(a, b), chunksize=4)
+        return _ordered(pool, range(a, b), window=3 * workers)
 
     try:
         if start > 0 or end is not None:
