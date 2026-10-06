@@ -120,14 +120,41 @@ def big_layout(cv: Canvas, text: str, rows: int, max_w: int, bold=True, gap: int
     return rows, bmps, sum(b.shape[1] for b in bmps) + gap * (len(bmps) - 1)
 
 
+def _script(c: str) -> str:
+    o = ord(c)
+    if 0x30A0 <= o <= 0x30FF:
+        return "kata"
+    if 0x3040 <= o <= 0x309F:
+        return "hira"
+    if 0x4E00 <= o <= 0x9FFF:
+        return "kanji"
+    return "other"
+
+
 def _split_point(text: str) -> int:
+    """Where to wrap a long line (a heuristic, no tokenizer): after punctuation,
+    else after a particle, else where hiragana meets kanji/katakana; never
+    inside a katakana word or between a kanji and its okurigana."""
     n = len(text)
-    best, bd = n // 2, 1e9
-    for i in range(int(n * 0.3), int(n * 0.7) + 1):
-        if 0 < i < n and text[i - 1] in "、。 　よはのでをもに":
-            d = abs(i - n / 2)
-            if d < bd:
-                best, bd = i, d
+    best, score = n // 2, -1e9
+    for i in range(max(1, int(n * 0.3)), min(n - 1, int(n * 0.7)) + 1):
+        a, b = text[i - 1], text[i]
+        sa, sb = _script(a), _script(b)
+        if a in "、。 　？！":
+            pri = 3
+        elif a in "よねはのでをもにがと":
+            pri = 2
+        elif sa == "hira" and sb in ("kanji", "kata"):
+            pri = 1
+        elif sa == "kata" and sb == "kata":
+            pri = -3
+        elif sa == "kanji" and sb == "hira":
+            pri = -1
+        else:
+            pri = 0
+        sc = pri * 10 - abs(i - n / 2)
+        if sc > score:
+            best, score = i, sc
     return best
 
 

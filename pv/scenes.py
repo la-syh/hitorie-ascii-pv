@@ -405,7 +405,7 @@ def night_away(cv: Canvas, ctx: Ctx) -> Post:
     if ln is not None:
         L.big(cv, ctx, ln, cv.H - 7, 9, m.fg if not grey else m.mid, m.accent if not grey else m.fg,
               max_w=cv.W - 12)
-    p = post_for(m, ctx)
+    p = post_for(m, ctx, glow=0.3)
     p.fade = 1 - 0.18 * seg(t, P["dark"], P["dark"] + 2)
     return p
 
