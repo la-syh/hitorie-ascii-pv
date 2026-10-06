@@ -26,9 +26,13 @@ make check     # verifies ffmpeg, packages, input files (+ sha256), fonts
 make render    # -> out/pv.mp4   (1920x1080, 30 fps, H.264 + AAC stereo)
 ```
 
-The full render takes about 5–15 minutes, depending on the number of CPU cores.
+The full render takes about 4–15 minutes, depending on the number of CPU cores.
 Frames are drawn in parallel worker processes and piped straight into FFmpeg,
-so no frame files are written to disk.
+so no frame files are written to disk. The video is encoded in 20-second
+chunks, cached in `build/segments/<key>/`, and then joined and muxed with the
+audio in a single pass. If a render is interrupted, run `make render` again and
+it picks up where it stopped. The cache key is a hash of the code, assets,
+inputs and settings, so editing a scene never reuses a stale chunk.
 
 ### All commands
 
@@ -38,7 +42,7 @@ so no frame files are written to disk.
 | `make check` | pre-flight check (`tools/check_inputs.py`) |
 | `make analyze` | beat/tempo/feature analysis → `build/analysis.{json,npz}` (runs automatically if missing) |
 | `make info` | prints the storyboard (scene list with start/end times) |
-| `make render` | full-quality video → `out/pv.mp4` (`make render WORKERS=3` to set parallelism) |
+| `make render` | full-quality video → `out/pv.mp4` (`WORKERS=3` sets parallelism; `ARGS="--max-time 120"` stops early so you can resume later) |
 | `make preview` | fast 960 × 540 draft → `out/preview_540p.mp4` |
 | `make sheet` | contact sheet, one frame every 2.5 s → `out/contact_sheet.png` |
 | `make stills` | a set of PNG stills → `out/stills/` |

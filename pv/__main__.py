@@ -37,6 +37,9 @@ def main(argv=None) -> None:
     s.add_argument("--workers", type=int, default=None)
     s.add_argument("--crf", type=int, default=18)
     s.add_argument("--preset", default="medium")
+    s.add_argument("--segment", type=float, default=20.0, help="chunk length (s) for resumable renders")
+    s.add_argument("--max-time", type=float, default=None,
+                   help="stop (exit 3) after this many seconds; rerun to resume")
 
     s = sub.add_parser("play", help="play the PV as text in this terminal")
     s.add_argument("--start", type=float, default=0.0)
@@ -77,7 +80,8 @@ def main(argv=None) -> None:
         sheet.save(a.out)
         print(a.out)
     elif a.cmd == "render":
-        render_video(audio, lrc, Path(a.out), a.fps, a.scale, a.start, a.end, a.workers, a.crf, a.preset)
+        render_video(audio, lrc, Path(a.out), a.fps, a.scale, a.start, a.end, a.workers, a.crf, a.preset,
+                     a.segment, a.max_time)
     elif a.cmd == "play":
         from .player import play
         play(audio, lrc, a.fps, a.start, not a.no_audio, not a.mono)

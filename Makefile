@@ -8,7 +8,8 @@
 
 PY ?= $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python3)
 WORKERS ?=
-W := $(if $(WORKERS),--workers $(WORKERS),)
+ARGS ?=
+W := $(if $(WORKERS),--workers $(WORKERS),) $(ARGS)
 
 .PHONY: all setup check analyze info render preview sheet stills play clean
 
