@@ -67,6 +67,7 @@ class Canvas:
     def put(self, x: int, y: int, s: str, fg=None, bg=None, bold=False,
             mask: np.ndarray | None = None) -> int:
         """Write text starting at cell (x, y). Returns the end x."""
+        x, y = int(round(x)), int(round(y))
         if y < 0 or y >= self.H:
             return x + sum(char_width(c) for c in s)
         for c in s:

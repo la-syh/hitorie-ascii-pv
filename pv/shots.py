@@ -125,6 +125,8 @@ def jp(cv: Canvas, ctx: Ctx, m: Mode, y: int = JP_ROW, band=True):
 
 
 def finish(cv, ctx, m, hit=1.0, **post):
+    """Japanese line + post settings + beat shake."""
+    cv.ch[PIC_H:] = 0                      # nothing from the picture under the lyric rows
     jp(cv, ctx, m)
     p = post_for(m if m is not REDM else NIGHT, ctx, **post)
     if m is REDM:

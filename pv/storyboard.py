@@ -15,6 +15,9 @@ from typing import Callable
 
 from . import scenes as sc
 from . import shots as sh
+from . import scenes2 as s2
+from . import scenes3 as s3
+from . import scenes4 as s4
 from .timeline import Grid
 
 TITLE = "日常と地球の額縁"
@@ -84,78 +87,78 @@ def build(grid: Grid, duration: float, lyrics=None) -> list[Seg]:
 # only ever read from the .lrc file.
 def _line_shots(B):
     return [
-        # verse 1
-        (sh.sh_machine, {}),        # 0  answering-machine service: PLAY is pressed
-        (sh.sh_lowfreq, {}),        # 1  recorded low frequency: speaker throbs
-        (sh.sh_frontline, {}),      # 2  front line of everyday: objects march to a red line
-        (sh.sh_where, {}),          # 3  where should I go?: signpost arrows spin
-        (sh.sh_jar, {}),            # 4  jokes stored up: a jar fills with HA
-        (sh.sh_burst, {}),          # 5  spat out at once: HA explodes everywhere
-        (sh.sh_shrug, {}),          # 6  well, of course: a giant shrug
-        (sh.sh_counter, {}),        # 7  not stopping even now: a timer runs flat out
-        (sh.sh_morph, {}),          # 8  everything keeps changing: the frame swaps twice a beat
-        # verse 2
-        (sh.sh_tatami, {}),         # 9  sooty four-and-a-half mats, from above
-        (sh.sh_ultrasound, {}),     # 10 brought-in ultrasound: rings + cracking glass
-        (sh.sh_escape, {}),         # 11 ran away from the everyday: footprints leave the frame
-        (sh.sh_laugh, {}),          # 12 you'll laugh at me: laughter closes in
-        (sh.sh_wrong_true, {}),     # 13 a mistaken truth: O struck by a red X
-        (sh.sh_right_lie, {}),      # 14 a correct lie: LIE flips readable, gets a check
-        (sh.sh_cut, {}),            # 15 cut-out correct answers: scissors on the dotted line
-        (sh.sh_checks, {}),         # 16 checking it every day: calendar ticks
-        # pre-chorus 1
-        (sh.sh_recede, {}),         # 17 it has gone far away: backwards out of the frames
-        (sh.sh_dusk, {}),           # 18 waited for the dark night: the sun sinks
-        (sh.sh_colorbars, {}),      # 19 the colour suddenly gone: colour bars drain
-        (sh.sh_wobble, {}),         # 20 staggering on purpose: a swaying tower
+        # verse 1 -- her room at night, then out to the station and the last train
+        (s2.v_machine, {}),         # 0  answering-machine service: PLAY is pressed in the dark room
+        (s2.v_lowfreq, {}),         # 1  recorded low hum: speaker throbs, rings in the tea
+        (s2.v_frontline, {}),       # 2  front line of everyday: rush-hour platform, red line
+        (s2.v_where, {}),           # 3  where should I go?: departure board can't settle
+        (s2.v_jokes, {}),           # 4  jokes kept to herself: corkboard fills with notes
+        (s2.v_spit, {}),            # 5  spat out at once: the notes stream out the window
+        (s2.v_shrug, {}),           # 6  well, yeah: sitcom shrug on the TV, cat asleep on it
+        (s2.v_nonstop, {}),         # 7  not stopping even now: inside the last train
+        (s2.v_changing, {}),        # 8  everything changes: the train windows flick scenery
+        # verse 2 -- the flat, the street, the store window, the desk
+        (s3.v_sooty, {}),           # 9  sooty four-and-a-half mats: laundry, boxes, dust
+        (s3.v_ultrasound, {}),      # 10 the ultrasound she brought: only the cat hears it
+        (s3.v_escape, {}),          # 11 ran from the everyday: window goes dark, down the stairs
+        (s3.v_laugh, {}),           # 12 you'll laugh at me: the group chat floods with www
+        (s3.v_wrong_truth, {}),     # 13 mistaken truth: TV wall news gets a CORRECTION
+        (s3.v_right_lie, {}),       # 14 correct lie: 100% HAPPY commercial ticks TRUE
+        (s3.v_cutout, {}),          # 15 cut-out answers: scissors, scrapbook
+        (s3.v_everyday, {}),        # 16 checking every day: day/night flip, calendar tears
+        # pre-chorus 1 -- the rooftop
+        (s3.v_distant, {}),         # 17 gone far away: last train's lights shrink
+        (s3.v_dusk, {}),            # 18 waited for the dark night: time-lapse dusk
+        (s3.v_nocolor, {}),         # 19 colour gone: neon street drains to grey
+        (s3.v_stagger, {}),         # 20 staggering on purpose: along the parapet, swaying
         # pre-chorus 2
-        (sh.sh_warp, {}),           # 21 go somewhere far: warp streaks
-        (sh.sh_sink, {}),           # 22 just want to sink: water rises, a boat goes down
-        (sh.sh_answer, {}),         # 23 don't know the answer: quiz, all crossed out
-        (sh.sh_clean, {"stop": 87.1}),  # 24 pointlessly pretty room; the stop
+        (s3.v_faraway, {}),         # 21 somewhere far: night highway, FAR AWAY sign
+        (s3.v_sink, {}),            # 22 just want to sink: phone sinks in the night sea
+        (s3.v_noanswer, {}),        # 23 don't know the answer: empty exam room
+        (s3.v_showroom, {"stop": 87.1}),   # 24 pointlessly pretty room; the stop
         # chorus 1
-        (sh.sh_forbid, {}),         # 25 mustn't expect: NO sign stamps the word
-        (sh.sh_shard, {}),          # 26 a talent so sharp it hurts: a growing red crystal
-        (sh.sh_spotlight, {"break": B(94.43)}),   # 27 smash the spotlight
-        (sh.sh_up, {"v": "elevator"}),   # 28 up up high!: elevator races up
-        (sh.sh_sphere, {}),         # 29 no way out, just a sphere: the path loops back
-        (sh.sh_expectbar, {}),      # 30 mustn't expect: the bar crashes to 0
-        (sh.sh_heart, {}),          # 31 an emotion that hurts: beating heart, ECG
-        (sh.sh_coldclock, {}),      # 32 the everyday's face is cold: frozen clock
-        (sh.sh_up, {"v": "arrows"}),     # 33 how about up high?: arrows rising
-        (sh.sh_door, {}),           # 34 come on: the door opens, we go in
+        (s4.c_omikuji, {}),         # 25 mustn't expect: shrine fortune, 大凶
+        (s4.c_stage, {}),           # 26 a talent that hurts: the live house
+        (s4.c_spotlight, {"break": B(94.43)}),   # 27 smash the spotlight
+        (s4.c_ferris, {}),          # 28 up up high: the red gondola climbs
+        (s4.c_sphere, {}),          # 29 just a sphere: the route comes back home
+        (s4.c_crane, {}),           # 30 mustn't expect: the crane drops the prize
+        (s4.c_typing, {}),          # 31 an emotion that hurts: typing / deleting 'I'm fine'
+        (s4.c_crossing, {}),        # 32 the everyday's face is cold: snowy crossing
+        (s4.c_ferris, {"inside": True}),   # 33 how about up high: inside the gondola
+        (s4.c_traindoor, {}),       # 34 come on: the last train's doors open
         # B section 2
-        (sh.sh_recede, {}),         # 35 it has gone far away (again)
-        (sh.sh_moon, {}),           # 36 waited for the dark night: a crescent rises
-        (sh.sh_pass, {}),           # 37 someone brushed past
-        (sh.sh_dodge, {}),          # 38 dodging on purpose
-        (sh.sh_road, {}),           # 39 go somewhere far: night highway
-        (sh.sh_sleep, {}),          # 40 want to sleep alone: battery drains
-        (sh.sh_rain, {}),           # 41 that seems sad: rain on one umbrella
-        (sh.sh_bottom, {"brk": 164.0}),  # 42 the bottom of a worn-out road
+        (s4.b_rearview, {}),        # 35 gone far away: from the rear window
+        (s4.b_bench, {}),           # 36 waited for the dark night: empty platform
+        (s4.b_express, {}),         # 37 someone brushed past: an express blasts through
+        (s4.b_dodge, {}),           # 38 dodging on purpose: against the crowd
+        (s4.b_seaside, {}),         # 39 somewhere far: seaside line, lighthouse
+        (s4.b_futon, {}),           # 40 sleep alone: 3 a.m., the light goes out
+        (s4.b_rainwindow, {}),      # 41 that seems sad: rain on the window
+        (s4.b_underpass, {"brk": 164.0}),  # 42 bottom of a worn-out road: underpass
         # chorus 2
-        (sh.sh_gameover, {"n": 2}), # 43 second failure
-        (sh.sh_crash, {}),          # 44 expecting was a loss: chart plunges
-        (sh.sh_conveyor, {}),       # 45 only monotonous work: stamping press
-        (sh.sh_loop, {}),           # 46 how about repeating: loop arrow
-        (sh.sh_maze, {}),           # 47 no escape route: maze walls close in
-        (sh.sh_eye, {}),            # 48 you've noticed, haven't you: the eye looks at us
-        (sh.sh_gameover, {"n": 3}), # 49 third failure
-        (sh.sh_switch, {}),         # 50 want to stop expecting: switch thrown OFF
-        (sh.sh_coldclock, {"peek": True}),  # 51 peeking at the everyday's face: keyhole
-        (sh.sh_up, {"v": "balloon"}),    # 52 how about up high: a balloon rises
-        (sh.sh_door, {}),           # 53 come on
+        (s4.c_gameover, {"n": 2}),  # 43 second failure
+        (s4.c_crane, {"drop_early": True}),  # 44 expecting was a loss
+        (s4.c_register, {}),        # 45 only monotonous work: konbini register
+        (s4.c_laundromat, {}),      # 46 repeat it again: laundromat at 2 a.m.
+        (s4.c_loopline, {}),        # 47 no way out: loop line, next stop the same
+        (s4.c_cctv, {}),            # 48 you've noticed: security monitors turn to us
+        (s4.c_gameover, {"n": 3}),  # 49 third failure: CONTINUE? NO
+        (s4.c_lightswitch, {}),     # 50 want to stop expecting: switch OFF
+        (s4.c_crossing, {"peek": True}),   # 51 peeking at the everyday's face: blinds
+        (s4.c_balloon, {}),         # 52 how about up high: red balloon at dawn
+        (s4.c_traindoor, {"morning": True}),  # 53 come on
         # last chorus
-        (sh.sh_forbid, {"red": True}),   # 54 mustn't expect
-        (sh.sh_shard, {}),          # 55 painful talent
-        (sh.sh_spotlight, {"break": B(198.43)}),  # 56 smash the spotlight
-        (sh.sh_up, {"v": "elevator"}),   # 57 up up high
-        (sh.sh_maze, {}),           # 58 no escape route
-        (sh.sh_sphere, {"pull": True}),  # 59 just a sphere: pull back to the whole globe
-        (sh.sh_expectbar, {}),      # 60 mustn't expect
-        (sh.sh_heart, {}),          # 61 painful emotion
-        (sh.sh_coldclock, {}),      # 62 the everyday's face is cold
-        (sh.sh_up, {"v": "arrows"}),     # 63 how about up high
+        (s4.c_omikuji, {"red": True}),     # 54 mustn't expect
+        (s4.c_stage, {}),           # 55 painful talent
+        (s4.c_spotlight, {"break": B(198.43)}),  # 56 smash the spotlight
+        (s4.c_ferris, {}),          # 57 up up high
+        (s4.c_loopline, {}),        # 58 no way out
+        (s4.c_sphere, {"pull": True}),     # 59 just a sphere: pull back into the frame
+        (s4.c_crane, {}),           # 60 mustn't expect
+        (s4.c_typing, {}),          # 61 painful emotion
+        (s4.c_crossing, {}),        # 62 the everyday's face is cold
+        (s4.c_ferris, {"inside": True}),   # 63 how about up high
         (sh.finale_room, {"hold": 219.8, "hit": 221.0, "out": 221.12}),  # 64 come on -> the framed Earth
     ]
 
@@ -177,4 +180,4 @@ def _line_segs(lyrics, D, B) -> list[Seg]:
 def text_chars() -> str:
     """All non-lyric text the storyboard may draw (for the glyph atlas)."""
     return TITLE + ROMAJI + ARTIST + CREDIT + "ASCII PV  /  unofficial fan work for wowaka" + \
-        "☎☂☀♨〒☁※♪♥★◆○◎↑←→×✓▲▶°℃笑ツ_\\" + "abcdefghijklmnopqrstuvwxyz"
+        "☎☂☀♨〒☁※♪♥★◆○◎↑←→×✓▲▶°℃笑ツ_\\" + "❄雪◯⌫▮●↻≡¥" + "abcdefghijklmnopqrstuvwxyz"

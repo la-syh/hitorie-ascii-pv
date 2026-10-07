@@ -23,12 +23,12 @@ FLASH_DELTA = 0.20
 def main():
     audio, lrc = find_inputs()
     pv = PV(audio, lrc, 30.0, 0.25)
-    cm = pv.atlas.array.mean(axis=(1, 2))
     lum = np.zeros(pv.n_frames, np.float32)
     w = np.array([0.2126, 0.7152, 0.0722], np.float32)
     for f in range(pv.n_frames):
         post = pv.draw(f)
         cv = pv.cv
+        cm = pv.rast._covmean()
         cell = cv.bg + (cv.fg - cv.bg) * cm[cv.ch][..., None]
         lum[f] = float((cell @ w).mean()) * post.fade + post.flash
     d = np.diff(lum)

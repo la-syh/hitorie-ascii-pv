@@ -11,25 +11,33 @@ render time.
 
 ---
 
-## Per-line redesign (branch `per-line-redesign`)
+## Per-line scenes in one world (branch `per-line-redesign`)
 
-Every sung line now has its own shot: one literal, animated idea that fills
-the frame and moves on the beat (`pv/shots.py`, wired up in
-`pv/storyboard.py` by line number). Drawn people are gone. The narrator only
-appears as an eye, a cursor, footprints or a light, because those read
-cleanly in ASCII. Shots use solid colour blocks, full-screen red, and stamps
-and hits on the beat. The Chinese caption strip from the enhanced edition is
-kept.
+Every sung line is a small composed scene with a setting, props and one
+action on the beat. The scenes all take place in a single night's world, so
+the places recur and the PV tells a story: the message on the answering
+machine in her room, the escape into the city, sinking, the choruses' shrine,
+live house, Ferris wheel, arcade and snowy crossing, and the way back to the
+framed Earth on her wall. Shot sizes vary between wide, medium, close and
+overhead. The narrator is never drawn: she appears only as a red light, a red
+umbrella, a phone screen or a shape under the futon.
 
-| lines | shots |
+Code: `pv/world.py` (the kit: sprites, skylines, apartment, trains, flap
+boards, clipping), plus the scenes in `pv/scenes2.py` (verse 1),
+`pv/scenes3.py` (verse 2, pre-choruses) and `pv/scenes4.py` (choruses,
+B section 2). The line-to-scene mapping, with a one-line description per
+line, is `_line_shots()` in `pv/storyboard.py`. `pv/shots.py` keeps the
+earlier single-symbol shots and the shared helpers.
+
+| section | places |
 |---|---|
-| verse 1 | ☎ PLAY pressed · speaker throbbing · objects marching to a red front line · spinning signpost · jar filling with HA · HA explodes · giant shrug · runaway timer · frame swapping twice a beat |
-| verse 2 | sooty four-and-a-half mats from above · ultrasound cracks the glass · footprints walk out of the picture frame · laughter closes in · ○ struck by × · LIE flips and gets a ✓ · scissors cut out ANSWER · calendar ticked off |
-| pre-chorus | backwards out of a frame tunnel · sun sinks · colour bars drain · swaying tower · warp · water rises, paper boat sinks · quiz all crossed out · pristine empty room, the stop |
-| chorus 1 | NO sign stamps 期待 · red crystal grows · spotlight on an empty mic shatters · elevator to the top · escape path loops round the globe · EXPECTATION bar crashes · beating heart + ECG · frozen clock · rising arrows · door opens |
-| B section 2 | frame tunnel · crescent moon · two lights graze · cursor dodges · night highway · battery drains · rain on an umbrella · stairwell down to the bottom |
-| chorus 2 | FAILED ×× · chart plunges · stamping press · loop ×N · maze closes in · the eye looks at us · FAILED ××× · EXPECT switch thrown OFF · clock through a keyhole · balloon · door |
-| last chorus | chorus-1 shots, with a red NO sign, a maze, and a pull back from the globe into the framed Earth on the wall |
+| verse 1 | her room at night (answering machine, corkboard of jokes blown out the window, sitcom on the TV) → rush-hour platform → departure board that can't settle → inside the last train, windows flicking between landscapes |
+| verse 2 | the sooty four-and-a-half mats → the radio only the cat hears → her window goes dark, a red light slips down the stairs → group chat floods with www → TV-wall news CORRECTION / 100% HAPPY ad → scissors and scrapbook → day/night flipping over the calendar |
+| pre-chorus | rooftop: the last train recedes, dusk time-lapse, neon street drains to grey, walking the parapet · night highway → phone sinking in the sea → empty exam room → model room, the stop |
+| chorus 1 | shrine fortune 大凶 → live house → spotlight shatters → Ferris wheel → route round the Earth comes back home → crane game drops the prize → typing and deleting "大丈夫" → snowy crossing, one red umbrella → inside the gondola → last train's doors open |
+| B section 2 | rear window → empty platform, moths → an express blasts through → against the crowd → seaside line, lighthouse → 3 a.m. futon → rain on the window → underpass |
+| chorus 2 | GAME OVER → crane slips → konbini register → laundromat → loop line, next stop always 日常 → security monitors show every place, the camera turns to us → CONTINUE? NO → light switch OFF → the crossing through the blinds → red balloon at dawn → doors |
+| last chorus | the chorus-1 places again, pulling back from the Earth into its frame on the wall |
 
 ## Enhanced edition (2026-10-07)
 
