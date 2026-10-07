@@ -108,18 +108,15 @@ Per-character lyric reveals are visual estimates from line timestamps, not manua
 
 Captions are an ordered list of `ja` and `zh` fields matching the LRC. Repeated Japanese lines may have different translations. The loader validates both line count and Japanese text, and reports mismatches. After edits, inspect stills or short clips before rendering the full video; rerun `tools/export_subtitles.py` to refresh the SRT.
 
-## Credits and distribution scope
+## Credits
 
 - **Song:** Hitorie, 日常と地球の額縁; words and music by wowaka. This is an unofficial fan project.
 - **Fonts:** [BIZ UDGothic](https://github.com/googlefonts/morisawa-biz-ud-gothic) and [Fusion Pixel](https://github.com/TakWolf/fusion-pixel-font). Their licenses are preserved in [`OFL.txt`](assets/fonts/OFL.txt) and [`OFL-FusionPixel.txt`](assets/fonts/OFL-FusionPixel.txt).
 - **Earth data:** public-domain land data from [Natural Earth](https://www.naturalearthdata.com/), rebuildable with `tools/make_earth_mask.py`.
-- **Visual references:** the locally supplied `world.execute(me).mp4` and the [11-person tribute PV](https://www.bilibili.com/video/BV1ZV4y1S7Q9). These informed composition and rhythm; the renderer does not require the reference videos.
-
-The recording, external LRC, reference videos, rendered videos and caches are excluded from source commits. Reference input checksums are recorded in [`inputs.sha256`](inputs.sha256). However, **`assets/subtitles.zh.json` contains the full Japanese lyrics and Chinese translations, and some scene code includes lyric excerpts**. The repository must therefore not be described as containing no lyrics. A code license does not automatically license the music, lyrics, translations or fonts on the same terms.
 
 ## License
 
-Original program code is released under the [MIT License](LICENSE), copyright `2026 la-syh`.
+Original program code is released under the [MIT License](LICENSE).
 
 The MIT License does not cover the song recording, Japanese lyrics, Chinese translations, reference videos or lyric excerpts embedded in the code. `assets/subtitles.zh.json` is excluded from the MIT grant. Fonts retain their accompanying SIL Open Font License terms; Natural Earth data remains public domain.
 

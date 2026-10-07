@@ -121,18 +121,15 @@ assets/
 tools/             检查、字幕导出与资源生成工具
 ```
 
-## 致谢与发布范围
+## 致谢
 
 - **歌曲**：ヒトリエ《日常と地球の額縁》，词曲 wowaka。本项目为非官方同人作品。
 - **字体**：[BIZ UDGothic](https://github.com/googlefonts/morisawa-biz-ud-gothic) 与 [Fusion Pixel](https://github.com/TakWolf/fusion-pixel-font)，许可证分别保留在 [`OFL.txt`](assets/fonts/OFL.txt) 和 [`OFL-FusionPixel.txt`](assets/fonts/OFL-FusionPixel.txt)。
 - **地球数据**：[Natural Earth](https://www.naturalearthdata.com/) 陆地数据，公共领域；可通过 `tools/make_earth_mask.py` 重建。
-- **视觉参考**：本地提供的 `world.execute(me).mp4` 与 [《日常と地球の額縁》11 人 PV 合作](https://www.bilibili.com/video/BV1ZV4y1S7Q9)。参考用于构图与节奏，渲染不需要这些参考视频。
-
-音频、外部 LRC、参考视频、成片和缓存不随源码提交；输入文件的参考校验值保存在 [`inputs.sha256`](inputs.sha256)。但 **`assets/subtitles.zh.json` 含完整日文歌词与中文翻译，部分场景代码也含歌词片段**，因此不能把本仓库描述为“完全不含歌词”。代码的开源许可不代表歌曲、歌词、翻译或字体都适用同一许可。
 
 ## 许可证
 
-本项目的原创程序代码采用 [MIT License](LICENSE)，版权署名为 `2026 la-syh`。
+本项目的原创程序代码采用 [MIT License](LICENSE)。
 
 MIT 许可不涵盖歌曲录音、日文歌词、中文译文、参考视频，以及代码中引用的歌词片段。`assets/subtitles.zh.json` 不在 MIT 授权范围内。字体沿用各自附带的 SIL Open Font License；Natural Earth 数据保持公共领域属性。
 
