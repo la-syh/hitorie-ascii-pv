@@ -232,6 +232,8 @@ class Canvas:
         ( _ " | / \\ ), which keeps letter shapes crisp at low resolution.
         Returns the boolean mask (bitmap-sized) of drawn cells."""
         h, w = bmp.shape
+        if h < 2 or w < 2:
+            return np.zeros_like(bmp, bool)
         gy, gx = np.gradient(bmp.astype(np.float32))
         gy = gy / self.aspect
         ang = (np.degrees(np.arctan2(gy, gx)) + 360.0) % 360.0

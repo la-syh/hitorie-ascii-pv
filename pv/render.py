@@ -58,7 +58,7 @@ class PV:
         self.an = load_analysis(audio, fps)
         self.lyrics = parse(lrc, self.an.duration)
         self.grid = Grid(self.an.beats, DOWNBEAT_ANCHOR)
-        self.segs = build(self.grid, self.an.duration)
+        self.segs = build(self.grid, self.an.duration, self.lyrics)
         cw, ch = max(2, int(round(12 * scale))), max(4, int(round(20 * scale)))
         self.atlas = Atlas(cw, ch, max(4, int(round(22 * scale))))
         self.translations = json.loads((ROOT / "assets/subtitles.zh.json").read_text())

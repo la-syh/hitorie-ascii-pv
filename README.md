@@ -11,6 +11,26 @@ render time.
 
 ---
 
+## Per-line redesign (branch `per-line-redesign`)
+
+Every sung line now has its own shot: one literal, animated idea that fills
+the frame and moves on the beat (`pv/shots.py`, wired up in
+`pv/storyboard.py` by line number). Drawn people are gone. The narrator only
+appears as an eye, a cursor, footprints or a light, because those read
+cleanly in ASCII. Shots use solid colour blocks, full-screen red, and stamps
+and hits on the beat. The Chinese caption strip from the enhanced edition is
+kept.
+
+| lines | shots |
+|---|---|
+| verse 1 | ☎ PLAY pressed · speaker throbbing · objects marching to a red front line · spinning signpost · jar filling with HA · HA explodes · giant shrug · runaway timer · frame swapping twice a beat |
+| verse 2 | sooty four-and-a-half mats from above · ultrasound cracks the glass · footprints walk out of the picture frame · laughter closes in · ○ struck by × · LIE flips and gets a ✓ · scissors cut out ANSWER · calendar ticked off |
+| pre-chorus | backwards out of a frame tunnel · sun sinks · colour bars drain · swaying tower · warp · water rises, paper boat sinks · quiz all crossed out · pristine empty room, the stop |
+| chorus 1 | NO sign stamps 期待 · red crystal grows · spotlight on an empty mic shatters · elevator to the top · escape path loops round the globe · EXPECTATION bar crashes · beating heart + ECG · frozen clock · rising arrows · door opens |
+| B section 2 | frame tunnel · crescent moon · two lights graze · cursor dodges · night highway · battery drains · rain on an umbrella · stairwell down to the bottom |
+| chorus 2 | FAILED ×× · chart plunges · stamping press · loop ×N · maze closes in · the eye looks at us · FAILED ××× · EXPECT switch thrown OFF · clock through a keyhole · balloon · door |
+| last chorus | chorus-1 shots, with a red NO sign, a maze, and a pull back from the globe into the framed Earth on the wall |
+
 ## Enhanced edition (2026-10-07)
 
 The enhanced render is `out/pv-enhanced-zh.mp4` (1080p / 30 fps). The

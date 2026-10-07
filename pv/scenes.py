@@ -748,14 +748,18 @@ def solo_tunnel(cv: Canvas, ctx: Ctx) -> Post:
             M.answering_machine(cv,43,17,72,27,m.fg,m.mid,m.accent,t,ctx.beat_frac<.5,
                                 count="01",spin=t*3)
         elif shot == 1:
-            I.portrait(cv,80,26,.78,m,t,closed=True)
-            for k in range(4):
-                M.wave_line(cv,9+k*10,1.5,34,t,.5,m.low,4,45)
+            # rain on an umbrella (no character drawings in the redesign)
+            rng = np.random.default_rng(12)
+            xs = rng.uniform(0, cv.W, 260)
+            ys = (rng.uniform(0, 46, 260) + t * 35) % 46
+            cv.scatter(xs, ys, "/", fg=m.low)
+            bmp = cv.text_bitmap("☂", 34, True)
+            cv.shape_field(bmp, int(80 - bmp.shape[1] / 2), 6, m.fg)
         elif shot == 2:
             S.clock(cv,80,25*cv.aspect,29,t*.4,m.fg,m.mid,m.accent)
         else:
             S.globe(cv,80,25*cv.aspect,30,t*36,fg=m.fg,dim=m.mid,accent=m.accent)
-        cv.put(7,47, "INTERLUDE / " + ("MESSAGE", "ROOM", "EVERYDAY", "EARTH")[shot],m.mid)
+        cv.put(7,47, "INTERLUDE / " + ("MESSAGE", "RAIN", "EVERYDAY", "EARTH")[shot],m.mid)
     p = beat_hit(post_for(m, ctx), ctx, 0.7)
     p.flash = 0.7 * warp ** 3
     return p
