@@ -11,6 +11,42 @@ render time.
 
 ---
 
+## Enhanced edition (2026-10-07)
+
+The enhanced render is `out/pv-enhanced-zh.mp4` (1080p / 30 fps). The
+original `out/pv.mp4` is retained. `out/subtitles.zh.srt` contains bilingual
+subtitles; Chinese in the video is burned in and needs no player setup.
+The translation is an original interpretive translation of the supplied LRC,
+not an official translation. Source audio and Japanese LRC are unchanged.
+
+The four-mat room now has books, a low desk, a mug, curtains, a sliding door,
+a hanging lamp and oblique window light. Verse two cuts between the room,
+a window-side close-up, a cracked mirror and a desk of cut-out answers.
+The original character now has a hair clip, sailor collar, facial detail and
+clothing texture. Later shots show a moonlit portrait, an empty clean room,
+and three framed selves repeating the same task. The instrumental alternates
+between the answering machine, portrait, clock and Earth rather than a date counter.
+
+Reference: the supplied `world.execute(me).mp4` (visual hierarchy / caption
+separation) and the supplied 11-person tribute PV (framed collage / repeated
+figures / object montage). Drawings are original procedural character art;
+no reference-video frames are embedded in the output. The reference edit has
+a different duration, so timing always follows the local Hitorie recording.
+
+Chinese strings are editable in `assets/subtitles.zh.json`, keyed by the
+original Japanese lines. Fusion Pixel 12px supplies missing Chinese glyphs;
+its license is in `assets/fonts/OFL-FusionPixel.txt`. Captions follow LRC
+line timings, including instrumental gaps, and stay clear of glitch/flash effects.
+
+Render using the local conda environment:
+
+```bash
+conda run -n ML python -m pv render --workers 4 --preset fast --out out/pv-enhanced-zh.mp4
+conda run -n ML python -m pv sheet --every 5 --out out/redesign-contact-sheet.png
+conda run -n ML python tools/check_redesign.py
+conda run -n ML python tools/export_subtitles.py
+```
+
 ## Quick start
 
 Prerequisites: **Python 3.9+** and **FFmpeg** (`brew install ffmpeg` on macOS,
@@ -146,7 +182,7 @@ Ideas taken from wowaka and from what has been written about him:
 * **A girl as the protagonist.** Each of his songs had an adolescent girl as
   its protagonist. Here that is an original silhouette with a bob haircut and a
   skirt, built from signed-distance shapes. She sits in a sooty
-  four-and-a-half-mat room, sinks, runs on the globe and sleeps inside a frame.
+  four-mat room, sinks, runs on the globe and sleeps inside a frame.
 * **Speed and bounce.** His style has been described as fast, quirky beats,
   an "over-compressed" band sound, and syllables that bounce on っ and ん
   ([ぴあ](https://lp.p.pia.jp/article/news/48033/index.html)). The PV answers
@@ -160,8 +196,7 @@ Ideas taken from wowaka and from what has been written about him:
   ([ナタリー](https://natalie.mu/music/news/305562),
   [Wikipedia](https://en.wikipedia.org/wiki/Polaris_(Hitorie_single)),
   [pixiv 百科事典](https://dic.pixiv.net/a/%E6%97%A5%E5%B8%B8%E3%81%A8%E5%9C%B0%E7%90%83%E3%81%AE%E9%A1%8D%E7%B8%81)).
-  During the guitar solo a counter rolls through the 2,751 days between the two
-  releases. The credits end "for wowaka", who died in April 2019.
+  The instrumental now reprises objects from the lyric narrative. The credits end "for wowaka", who died in April 2019.
 
 ### Storyboard
 
@@ -171,14 +206,14 @@ Ideas taken from wowaka and from what has been written about him:
 | 13.22–26.01 | intro (band) | title in big structural ASCII inside a gilded frame; the Earth turning behind it |
 | 26.01–38.55 | intro | the Earth, frames emanating outward, the title orbiting as a ring of text; dive into the globe |
 | 38.55–51.30 | verse 1 | answering machine and LCD counter; a timestamped transcript; jokes burst out of the speaker; then "everything changes" glitch inversions |
-| 51.30–64.10 | verse 2 | sooty four-and-a-half-mat room; ultrasound ripples; `wwww` laughter scribbled on the walls; mirrored truths and lies; cut-out squares stamped OK; lyrics written vertically (tategaki) |
+| 51.30–64.10 | verse 2 | sooty four-mat room; ultrasound ripples; `wwww` laughter scribbled on the walls; mirrored truths and lies; cut-out squares stamped OK; lyrics written vertically (tategaki) |
 | 64.10–76.70 | pre-chorus 1 | the room recedes into a small frame in the night; colour drains; the picture sways |
 | 76.70–89.50 | pre-chorus 2 | walking toward the horizon; sinking with bubbles; question marks; the "pointlessly beautiful" clean room; the stop |
 | 89.50–112.43 | chorus 1 | beat-flipped big lyrics; a spotlight smashed into flying shards; rising through speed lines; running on the Earth; a cold clock face; a door-frame opens |
-| 112.43–141.00 | guitar solo | endless frame tunnel with a ring spectrum around the globe, then the 2011 → 2018 day counter |
+| 112.43–141.00 | guitar solo | endless frame tunnel with a ring spectrum around the globe, then a montage of the phone, portrait, clock and Earth |
 | 141.00–153.60 | B section 2 | night street, a crowd walking the other way; someone brushes past; she sidesteps |
 | 153.60–166.82 | B section 2 | the road at night; sleeping alone inside a frame; rain; the road tipping down to its bottom |
-| 166.82–193.60 | chorus 2 | FAILURE 02 / 03 counters with a red X; a grid of identical tiny workers; the globe; the clock peeking in |
+| 166.82–193.60 | chorus 2 | FAILURE 02 / 03 counters with a red X; three framed portraits of repeated work; the globe; the clock peeking in |
 | 193.60–214.58 | last chorus | the chorus-1 imagery again, more intense; pull back to the whole globe |
 | 214.58–221.30 | ending | out of the Earth, into the frame on the wall of her room: 日常と地球の額縁 |
 | 221.30–226.39 | silence | credits |

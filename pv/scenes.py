@@ -6,7 +6,6 @@ can be rendered in any order and in parallel.  Song-specific timings live in
 """
 from __future__ import annotations
 
-import datetime as _dt
 import math
 
 import numpy as np
@@ -14,6 +13,7 @@ import numpy as np
 from . import lyricfx as L
 from . import motifs as M
 from . import shapes as S
+from . import illustration as I
 from .canvas import Canvas
 from .lrc import text_width
 from .palette import DAY, DIM, FAINT, GREY, INK, NIGHT, PAPER, PAPER_DIM, RED, RED_DIM, Mode, mix
@@ -44,7 +44,7 @@ def base(cv: Canvas, m: Mode) -> None:
 def post_for(m: Mode, ctx: Ctx, **kw) -> Post:
     # (film grain is off by default: per-pixel noise triples the video bitrate)
     if m.paper:
-        p = Post(glow=0.12, glow_radius=4, scan=0.05, vignette=0.32, grain=0.0)
+        p = Post(glow=0.0, glow_radius=4, scan=0.05, vignette=0.32, grain=0.0)
     else:
         p = Post(glow=0.6, glow_radius=5, scan=0.10, vignette=0.38, grain=0.0)
     for k, v in kw.items():
@@ -68,7 +68,7 @@ def flip_mode(ctx: Ctx, every: str = "beat", start_paper=False) -> Mode:
 
 
 def bottom_lyric(cv: Canvas, ctx: Ctx, m: Mode, y: int | None = None, band=True):
-    y = cv.H - 4 if y is None else y
+    y = min(cv.H - 6, cv.H - 4 if y is None else y)
     L.subtitle(cv, ctx, ctx.line(), y, m.fg, m.accent, m.mid, band=m.bg if band else None)
 
 
@@ -285,79 +285,50 @@ def phone(cv: Canvas, ctx: Ctx) -> Post:
 
 
 def room_scene(cv: Canvas, ctx: Ctx) -> Post:
-    """Verse 2: a sooty four-and-a-half-mat room; the narrator hugs her knees."""
-    m = DAY
-    sootbg = mix(PAPER, GREY, 0.18)
-    cv.clear(sootbg, m.fg)
-    t, P = ctx.t, ctx.params
-    vp = (0, 0, cv.W - 1, cv.H - 1)
-    info = M.room(cv, vp, m.fg, m.mid, mix(sootbg, INK, 0.3), t=t, frame_globe_lon=None,
-                  night_window=False)
-    fy = info["floor_y"]
-    # radio + ultrasound rings
-    u0, u1 = P["ultra"]
-    rx, ry = 44, int(fy + 9)
-    cv.put(rx - 3, ry - 1, ".-^-.", m.fg)
-    cv.put(rx - 3, ry, "[o_o]", m.fg, bold=True)
-    if u0 <= t < u1 + 0.6:
-        k = 1 - seg(t, u1, u1 + 0.6)
-        S.ripple_rings(cv, rx, ry * cv.aspect, t, 30, 5.0, mix(sootbg, INK, 0.15 + 0.45 * k), "arc",
-                       width=0.4, maxr=8 + 34 * seg(t, u0, u1))
-        cv.put(rx - 3, ry, "[o_o]", m.accent, bold=True)
-    # mocking laughter scribbled on the walls, one more per beat
-    w0, w1 = P["laugh"]
-    if t >= w0:
-        b0 = int(math.floor(ctx.grid.beat_pos(w0)))
-        b1 = int(math.floor(ctx.beat))
-        for b in range(b0, min(b1, b0 + 40) + 1):
-            rng = np.random.default_rng(b * 13 + 5)
-            x = int(rng.integers(4, cv.W - 30))
-            y = int(rng.integers(2, int(fy) - 2))
-            s = "w" * int(rng.integers(3, 9))
-            fresh = b == b1
-            cv.put(x, y, s, m.accent if fresh else m.mid, bold=fresh)
-    # cut-out squares (切り取った正解) stamped OK on each beat
-    c0 = P["cut"]
-    if t >= c0:
-        b0 = int(math.floor(ctx.grid.beat_pos(c0)))
-        b1 = int(math.floor(ctx.beat))
-        for b in range(b0, b1 + 1):
-            rng = np.random.default_rng(b * 7 + 1)
-            w, h = int(rng.integers(10, 18)), int(rng.integers(4, 7))
-            x = int(rng.integers(30, cv.W - 40))
-            y = int(rng.integers(3, int(fy) - h - 1))
-            cv.box(x, y, x + w, y + h, m.fg, "+- ", fill=True, bg=sootbg)
-            cv.line(x, y, x + w, y, m.fg, "-")
-            for yy in range(y + 1, y + h, 2):
-                cv.put(x, yy, ":", m.fg)
-                cv.put(x + w, yy, ":", m.fg)
-            cv.put(x - 3, y, "8<", m.mid)
-            cv.put(x + w // 2 - 1, y + h // 2, "OK", m.accent if b == b1 else m.fg, bold=True)
-    # narrator
-    S.figure(cv, 106, (cv.H - 4) * cv.aspect, 74, "sit", ph=t * 0.25, fg=m.fg)
-    M.soot(cv, t, 3, 260, mix(sootbg, INK, 0.45))
-    # mirror the whole room on alternate beats ("wrong truths, right lies")
-    f0, f1 = P["mirror"]
-    if f0 <= t < f1 and ctx.beat_i % 2 == 1:
-        cv.ch[:] = cv.ch[:, ::-1]
-        cv.fg[:] = cv.fg[:, ::-1]
-        cv.bg[:] = cv.bg[:, ::-1]
-        swap = {"/": "\\", "\\": "/", "(": ")", ")": "(", "<": ">", ">": "<", "[": "]", "]": "["}
-        for a, b in swap.items():
-            ia, ib = cv.ids(a)[0], cv.ids(b)[0]
-            ma = cv.ch == ia
-            cv.ch[cv.ch == ib] = ia
-            cv.ch[ma] = ib
-    # lyrics, written vertically (tategaki) down the right side
-    cur = ctx.line()
-    prev = [ln for ln in ctx.lines_between(ctx.t0, t) if ln is not cur][-1:]
-    for ln in prev:
-        cv.put(cv.W - 8, 4, "", m.mid)
-        for i, c in enumerate(ln.text):
-            cv.put(cv.W - 9, 4 + i, {"ー": "|"}.get(c, c), m.mid)
-    if cur is not None:
-        L.vertical(cv, ctx, cur, cv.W - 5, 4, m.fg, m.accent, m.mid)
-    return post_for(m, ctx, vignette=0.45)
+    """Four lyric-led shots: lived-in room, window portrait, mirror, cutouts."""
+    t=ctx.t
+    m=DAY
+    base(cv,m)
+    if t < 54.519:
+        M.room(cv,(0,0,159,48),m.fg,m.mid,m.low,t=t,night_window=False)
+        S.figure(cv,105,47*cv.aspect,72,"sit",ph=t*.25,fg=m.fg)
+        cv.put(43,38,"[o_o]",m.accent)
+        if t >= 52.977:
+            S.ripple_rings(cv,46,38*cv.aspect,t-52.977,28,7,m.mid,"arc",maxr=45)
+        M.soot(cv,t,3,100,m.low)
+    elif t < 57.798:
+        # Window-side close-up: city beyond, hair clip and sailor collar retained.
+        cv.box(7,3,75,44,m.mid)
+        for x in (8,30,53,75): cv.line(x,3,x,44,m.mid,"|")
+        cv.line(7,22,75,22,m.mid)
+        for k in range(9):
+            x=10+k*7; h=6+(k*13)%15
+            cv.box(x,42-h,x+5,42,m.low)
+        I.portrait(cv,104,25,.82,m,t)
+        for k in range(9):
+            cv.put(8+(k*17)%55,6+(k*7)%29,"ha" if k%2 else "ww",m.accent if k==int(ctx.beat)%9 else m.low)
+    elif t < 60.976:
+        # Two distinct expressions, separated by a cracked mirror.
+        S.picture_frame(cv,7,2,151,46,m.fg,m.mid,style="gilded")
+        I.portrait(cv,49,26,.72,m,t)
+        I.portrait(cv,112,26,.72,m,t+.6,mirror=True,closed=True)
+        cv.polyline([(80,4),(74,13),(83,21),(76,30),(84,44)],m.accent)
+        cv.put(18,6,"TRUE / FALSE",m.accent)
+        cv.put(111,42,"FALSE / TRUE",m.mid)
+    else:
+        # Overhead desk: cut-out answers become a conveyor of identical stamps.
+        for y in range(3,47,4): cv.line(0,y,159,y,m.faint,"-")
+        for k in range(6):
+            x=9+(k%3)*49; y=5+(k//3)*21
+            cv.box(x,y,x+36,y+16,m.mid,bg=m.bg,fill=True)
+            for j in range(3): cv.line(x+5,y+4+j*3,x+29-(j%2)*8,y+4+j*3,m.low,".")
+            if k <= int((t-60.976)*2):
+                cv.put(x+11,y+8,"[ OK ]",m.accent,bold=True)
+            cv.put(x-3,y+2,"8<",m.fg)
+        cv.line(81,2,81,46,m.fg,":")
+    ln=ctx.line()
+    if ln: L.subtitle(cv,ctx,ln,48,m.fg,m.accent,m.mid,band=m.bg)
+    return post_for(m,ctx,vignette=.27)
 
 
 # ================================================================ PRE-CHORUS
@@ -366,6 +337,21 @@ def night_away(cv: Canvas, ctx: Ctx) -> Post:
     """Pre-chorus 1: the room recedes into a small frame in the dark; then
     colour drains away and the picture sways."""
     t, P = ctx.t, ctx.params
+    if t >= P["grey"]:
+        m=NIGHT
+        base(cv,m)
+        # A close-up looks away as colour disappears; empty frames drift outside.
+        for k in range(5):
+            x=7+k*19+3*math.sin(t*.6+k)
+            y=5+(k%3)*7
+            S.picture_frame(cv,x,y,x+27,y+22,m.low,m.faint,style="simple")
+        I.portrait(cv,113+2*math.sin(t*.7),27,.82,m,t,closed=t>=P["sway"])
+        for x in (5,39,73): cv.line(x,2,x,46,m.mid,"|")
+        cv.line(5,23,73,23,m.mid)
+        M.soot(cv,t,29,75,m.low)
+        ln=ctx.line()
+        if ln: L.subtitle(cv,ctx,ln,48,m.fg,m.accent,m.mid,band=m.bg)
+        return post_for(m,ctx,glow=.25,vignette=.3)
     grey = t >= P["grey"]
     m = NIGHT
     base(cv, m)
@@ -462,7 +448,9 @@ def sink(cv: Canvas, ctx: Ctx) -> Post:
         base(cv, m)
         M.room(cv, (0, 0, cv.W - 1, cv.H - 1), m.fg, m.mid, m.faint, t=t, tatami=True,
                window=True, wall_frame=True, night_window=False)
-        S.figure(cv, cv.W / 2 + 24, 49 * cv.aspect, 52, "stand", fg=m.fg)
+        # Only her elongated shadow remains in the pristine room.
+        cv.polyline([(97,35),(113,39),(134,48),(114,46),(100,39),(97,35)],m.low)
+        cv.put(103,38,"...",m.accent)
         p = post_for(m, ctx, vignette=0.2)
         stop = P["stop"]
         if t >= stop:
@@ -708,42 +696,25 @@ def failure(cv: Canvas, ctx: Ctx) -> Post:
 
 
 def repetition(cv: Canvas, ctx: Ctx) -> Post:
-    """Monotonous work: the same tiny figure walking in a grid of identical
-    frames, progress bars filling and resetting every bar."""
-    t = ctx.t
-    m = DAY
-    base(cv, m)
-    cols, rows = 6, 3
-    cw, chh = (cv.W - 4) // cols, (cv.H - 12) // rows
-    bp = ctx.bar % 1.0
-    for r in range(rows):
-        for c in range(cols):
-            x0, y0 = 2 + c * cw, 1 + r * chh
-            idx = r * cols + c
-            on = (ctx.beat_i % (cols * rows)) == idx
-            S.picture_frame(cv, x0 + 1, y0, x0 + cw - 2, y0 + chh - 2, m.accent if on else m.fg, m.mid,
-                            style="simple", depth=1)
-            S.figure(cv, x0 + cw / 2, (y0 + chh - 4) * cv.aspect, 16, "walk", ph=ctx.beat * 0.5, fg=m.fg)
-            fill = int(bp * 10)
-            cv.put(x0 + 3, y0 + chh - 3, "[" + "#" * fill + "." * (10 - fill) + "]", m.mid)
-    ln = ctx.line()
-    if ln is not None:
-        L.big(cv, ctx, ln, cv.H - 6, 9, m.fg, m.accent, max_w=cv.W - 8)
-    p = chorus_fx(cv, ctx, post_for(m, ctx))
-    # copy-paste stutter: on the off-beats, duplicate the top half into the bottom
-    if ctx.beat_frac > 0.5 and ctx.beat_i % 2 == 1:
-        h = (cv.H - 12) // 2
-        cv.ch[h:2 * h] = cv.ch[0:h]
-        cv.fg[h:2 * h] = cv.fg[0:h]
-    return p
+    """Three framed selves loop through fatigue, closed eyes and concealment."""
+    m=DAY
+    base(cv,m)
+    for k in range(3):
+        x=4+k*52
+        active=(ctx.beat_i%3)==k
+        S.picture_frame(cv,x,3,x+47,43,m.accent if active else m.fg,m.mid,style="simple")
+        I.portrait(cv,x+24,24,.52,m,ctx.t+k,mirror=k==2,closed=k==1,covered=k==2)
+        cv.put(x+4,45,f"COPY {k+1:02d}  /  REPEAT",m.mid)
+        cv.line(x+3,42,x+3+40*(ctx.bar%1),42,m.accent,"=")
+    ln=ctx.line()
+    if ln: L.subtitle(cv,ctx,ln,48,m.fg,m.accent,m.mid,band=m.bg)
+    return beat_hit(post_for(m,ctx,glow=0,vignette=.2),ctx,.4)
 
 
 # ===================================================================== SOLO
 
 def solo_tunnel(cv: Canvas, ctx: Ctx) -> Post:
-    """Guitar solo: an endless tunnel of picture frames with a ring spectrum
-    around the Earth; then a counter rolls the days from the 2011 VOCALOID
-    original to the 2018 band recording."""
+    """Frame tunnel followed by a phrase-timed montage of everyday objects."""
     t, P = ctx.t, ctx.params
     m = NIGHT
     base(cv, m)
@@ -771,21 +742,20 @@ def solo_tunnel(cv: Canvas, ctx: Ctx) -> Post:
                     m.accent if v > 0.85 else m.fg)
         S.globe(cv, cx, cy, R0, 40 * t, tilt=0.3, fg=m.fg, dim=m.low, accent=m.accent)
     else:
-        d0 = _dt.date(*P["date0"])
-        d1 = _dt.date(*P["date1"])
-        total = (d1 - d0).days
-        b0 = ctx.grid.beat_pos(P["count0"])
-        b1 = ctx.grid.beat_pos(P["count1"])
-        k = min(1.0, max(0.0, (math.floor(ctx.beat) - b0) / max(1, (b1 - b0))))
-        k = k ** 1.6
-        day = int(round(total * k))
-        d = d0 + _dt.timedelta(days=day)
-        s = d.strftime("%Y.%m.%d")
-        done = t >= P["count1"]
-        col = m.accent if done and (ctx.frame // 3) % 2 == 0 else m.fg
-        cv.big_text(s, cv.W / 2, cv.H / 2 - 0.5, 9, fg=col, bold=True)
-        cv.put_center(int(cv.H / 2 - 8), f"{P['label0']}  ->  {P['label1']}", m.mid)
-        cv.put_center(int(cv.H / 2 + 6), f"day {day:04d} / {total}", m.accent if done else m.mid)
+        # Match the instrumental phrases with objects from the song itself.
+        shot = int((t-P["count0"])/3.2) % 4
+        if shot == 0:
+            M.answering_machine(cv,43,17,72,27,m.fg,m.mid,m.accent,t,ctx.beat_frac<.5,
+                                count="01",spin=t*3)
+        elif shot == 1:
+            I.portrait(cv,80,26,.78,m,t,closed=True)
+            for k in range(4):
+                M.wave_line(cv,9+k*10,1.5,34,t,.5,m.low,4,45)
+        elif shot == 2:
+            S.clock(cv,80,25*cv.aspect,29,t*.4,m.fg,m.mid,m.accent)
+        else:
+            S.globe(cv,80,25*cv.aspect,30,t*36,fg=m.fg,dim=m.mid,accent=m.accent)
+        cv.put(7,47, "INTERLUDE / " + ("MESSAGE", "ROOM", "EVERYDAY", "EARTH")[shot],m.mid)
     p = beat_hit(post_for(m, ctx), ctx, 0.7)
     p.flash = 0.7 * warp ** 3
     return p

@@ -90,6 +90,8 @@ def room(cv: Canvas, vp, fg, dim, faint, t: float = 0.0, back=0.42, tatami=True,
             if R > 1.5:
                 S.globe(cv, (ix0 + ix1) / 2 + 0.5, ((iy0 + iy1) / 2 + 0.5) * cv.aspect, R,
                         frame_globe_lon, fg=fg, dim=faint, grid=R > 6, accent=accent)
+    from .illustration import furnishings
+    furnishings(cv, vp, fg, dim, faint, t)
     return info
 
 

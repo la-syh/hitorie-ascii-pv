@@ -304,7 +304,19 @@ def figure(cv: Canvas, x, y, h, pose="stand", ph=0.0, fg=None, flip=False,
     d = figure_sdf(cv.X[y0:y1, x0:x1], cv.Y[y0:y1, x0:x1], x, y, h, pose, ph, flip)
     D = np.full((cv.H, cv.W), np.inf, np.float32)
     D[y0:y1, x0:x1] = d
-    return draw_sdf(cv, D, fg, fill, edge, bg=bg)
+    inside = draw_sdf(cv, D, fg, fill, edge, bg=bg)
+    if h >= 25:
+        sx = -1 if flip else 1
+        hx, hy = (0, -.50 + math.sin(ph*2*math.pi)*.006) if pose == "sit" else ((-.44,-.075) if pose == "lie" else (.0875 if pose == "run" else 0, -.885-abs(math.sin(ph*2*math.pi))*.018*(pose != "stand")))
+        face = (((cv.X-x)/h*sx-hx-.023)/.043)**2 + (((cv.Y-y)/h-hy-.014)/.044)**2 < 1
+        face &= inside
+        cv.ch[face] = cv.ids(".")[0]
+        eye_x, eye_y = x+sx*(hx+.041)*h, (y+(hy+.004)*h)/cv.aspect
+        cv.scatter([eye_x], [eye_y], "-", fg=fg)
+        hatch = inside & (cv.Y > y+(hy+.13)*h) & (((cv.xx.astype(int)+2*cv.yy.astype(int))%5)==0)
+        cv.ch[hatch] = cv.ids(":")[0]
+        cv.scatter([x+sx*(hx-.025)*h],[(y+(hy-.025)*h)/cv.aspect],"=",fg=(1,.23,.18))
+    return inside
 
 
 # --------------------------------------------------------------------- clock

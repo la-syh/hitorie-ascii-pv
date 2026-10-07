@@ -77,11 +77,10 @@ def build(grid: Grid, duration: float) -> list[Seg]:
         Seg(108.88, 110.55, sc.rise),
         Seg(110.55, D(112.4), sc.beckon, dict(zoom=D(112.4) - 0.9)),
 
-        # === guitar solo: frame tunnel + ring spectrum, then the 2011 -> 2018 day counter
+        # === guitar solo: frame tunnel + ring spectrum, then an everyday-object montage
         Seg(D(112.4), 141.00, sc.solo_tunnel,
             dict(count0=D(125.2), count1=D(138.0), warp=D(139.6),
-                 date0=(2011, 5, 18), date1=(2018, 11, 28),
-                 label0="アンハッピーリフレイン 2011", label1="ポラリス 2018")),
+                 )),
 
         # === B section 2
         Seg(141.00, 153.60, sc.crowd, {"pass": 148.4, "dodge": 150.9}),

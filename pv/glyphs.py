@@ -30,6 +30,8 @@ class Atlas:
             False: ImageFont.truetype(str(FONT_REGULAR), size),
             True: ImageFont.truetype(str(FONT_BOLD), size),
         }
+        self.zh_font = ImageFont.truetype(str(ROOT / "assets/fonts/FusionPixel-12px.ttf"), max(12, round(size / 12) * 12))
+        self.zh_chars = set()
         self.tiles: list[np.ndarray] = []
         self.index: dict[tuple[str, bool], int | tuple[int, int]] = {}
         self._arr: np.ndarray | None = None
@@ -50,7 +52,7 @@ class Atlas:
         W, H = self.cw * w, self.ch
         im = Image.new("L", (W * 2, H * 2), 0)
         d = ImageDraw.Draw(im)
-        f = self.fonts[bold]
+        f = self.zh_font if c in self.zh_chars else self.fonts[bold]
         adv = f.getlength(c)
         if w == 1:
             x = (W - adv) / 2

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 import os
 import subprocess
@@ -60,6 +61,9 @@ class PV:
         self.segs = build(self.grid, self.an.duration)
         cw, ch = max(2, int(round(12 * scale))), max(4, int(round(20 * scale)))
         self.atlas = Atlas(cw, ch, max(4, int(round(22 * scale))))
+        self.translations = json.loads((ROOT / "assets/subtitles.zh.json").read_text())
+        self.atlas.zh_chars = set("".join(self.translations.values())) - self.lyrics.chars()
+        self.atlas.ensure("".join(self.translations.values()))
         self.atlas.ensure("".join(self.lyrics.chars()) + text_chars(), bold=False)
         self.atlas.ensure("".join(self.lyrics.chars()) + text_chars(), bold=True)
         self.cv = Canvas(self.atlas, COLS, ROWS)
@@ -86,11 +90,26 @@ class PV:
             S.glitch_rows(self.cv, rng, 0.9, 16)
             S.char_noise(self.cv, rng, 0.06)
             post.chroma = max(post.chroma, 4)
+        # A stable caption strip, added after all character-level tearing.
+        ln = self.lyrics.at(t)
+        if ln and ln.text in self.translations:
+            self.cv.ch[51:54] = 0
+            self.cv.bg[51:54] = (.025,.025,.03)
+            self.cv.put_center(52, self.translations[ln.text], (.94,.91,.84))
         return post
 
     def frame(self, frame: int) -> np.ndarray:
         post = self.draw(frame)
-        return self.rast.render(post, frame)
+        pixels = self.rast.render(post, frame)
+        # Keep the subtitle pixels free from shake, chromatic split and flashes.
+        if self.lyrics.at(frame / self.fps):
+            cv = self.cv
+            cov = self.atlas.array[cv.ch[51:]].transpose(0, 2, 1, 3)
+            bg = cv.bg[51:, None, :, None, :]
+            raw = bg + (cv.fg[51:] - cv.bg[51:])[:, None, :, None, :] * cov[..., None]
+            y = 51 * self.atlas.ch
+            pixels[y:] = (np.clip(raw.reshape(3*self.atlas.ch, self.size[0], 3), 0, 1) * 255).astype(np.uint8)
+        return pixels
 
 
 # ------------------------------------------------------------- multiprocess
@@ -153,7 +172,7 @@ def cache_key(audio: Path, lrc: Path, fps: float, scale: float, crf: int, preset
     """Hash of everything that affects the pixels: code, assets, inputs, settings."""
     h = hashlib.sha1()
     code = [p for p in sorted((ROOT / "pv").glob("*.py")) if p.name not in ("player.py", "__main__.py")]
-    for p in code + [ROOT / "assets" / "earth_mask.txt", lrc,
+    for p in code + [ROOT / "assets" / "earth_mask.txt", ROOT / "assets/subtitles.zh.json", lrc,
                                                      BUILD / "analysis.json"]:
         h.update(p.read_bytes())
     for p in sorted((ROOT / "assets" / "fonts").glob("*.ttf")):
