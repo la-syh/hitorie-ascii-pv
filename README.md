@@ -11,6 +11,29 @@ render time.
 
 ---
 
+## Abstract pass (verses 1–2 and the sinking)
+
+The two verses (lines 0–16) and the "sink" line (22) are no longer pictures
+of objects. They are moving images made of characters, in `pv/scenes5.py`,
+built on the field toolkit in `pv/abstract.py` (value noise, fbm, domain
+warp, colour gradients, text used as texture):
+
+- the message unspools from a red REC dot as a spiral of its own characters
+- the low hum is a sea of strokes heaving, with a pressure wave on each kick
+- a tide of 日常 glyphs presses against a red front line
+- a flow field that never settles
+- laughter falls like sand into a dune, then detonates and freezes mid-air
+- a river of timestamps; a kaleidoscope that re-seeds every half-beat
+- soot smoke out of which the four-and-a-half mats condense
+- ultrasound as a moiré of interfering rings
+- a red line tearing out of a lattice
+- a grin drawn in w's
+- 本当 written in tiny 嘘, and 嘘 written in tiny 正
+- answers cut out of a page of text
+- a wall of 365 days ticked by a wave
+- the descent: caustic light nets fading with depth, the sung characters
+  sinking and eroding into bubbles, one red point going down into black
+
 ## Per-line scenes in one world (branch `per-line-redesign`)
 
 Every sung line is a small composed scene with a setting, props and one

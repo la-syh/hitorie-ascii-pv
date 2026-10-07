@@ -18,6 +18,7 @@ from . import shots as sh
 from . import scenes2 as s2
 from . import scenes3 as s3
 from . import scenes4 as s4
+from . import scenes5 as s5
 from .timeline import Grid
 
 TITLE = "日常と地球の額縁"
@@ -88,24 +89,24 @@ def build(grid: Grid, duration: float, lyrics=None) -> list[Seg]:
 def _line_shots(B):
     return [
         # verse 1 -- her room at night, then out to the station and the last train
-        (s2.v_machine, {}),         # 0  answering-machine service: PLAY is pressed in the dark room
-        (s2.v_lowfreq, {}),         # 1  recorded low hum: speaker throbs, rings in the tea
-        (s2.v_frontline, {}),       # 2  front line of everyday: rush-hour platform, red line
-        (s2.v_where, {}),           # 3  where should I go?: departure board can't settle
-        (s2.v_jokes, {}),           # 4  jokes kept to herself: corkboard fills with notes
-        (s2.v_spit, {}),            # 5  spat out at once: the notes stream out the window
-        (s2.v_shrug, {}),           # 6  well, yeah: sitcom shrug on the TV, cat asleep on it
-        (s2.v_nonstop, {}),         # 7  not stopping even now: inside the last train
-        (s2.v_changing, {}),        # 8  everything changes: the train windows flick scenery
+        (s5.a_message, {}),         # 0  answering-machine service: PLAY is pressed in the dark room
+        (s5.a_lowfreq, {}),         # 1  recorded low hum: speaker throbs, rings in the tea
+        (s5.a_frontline, {}),       # 2  front line of everyday: rush-hour platform, red line
+        (s5.a_flow, {}),           # 3  where should I go?: departure board can't settle
+        (s5.a_stockpile, {}),           # 4  jokes kept to herself: corkboard fills with notes
+        (s5.a_burst, {}),            # 5  spat out at once: the notes stream out the window
+        (s5.a_freeze, {}),           # 6  well, yeah: sitcom shrug on the TV, cat asleep on it
+        (s5.a_timeriver, {}),         # 7  not stopping even now: inside the last train
+        (s5.a_kaleido, {}),        # 8  everything changes: the train windows flick scenery
         # verse 2 -- the flat, the street, the store window, the desk
-        (s3.v_sooty, {}),           # 9  sooty four-and-a-half mats: laundry, boxes, dust
-        (s3.v_ultrasound, {}),      # 10 the ultrasound she brought: only the cat hears it
-        (s3.v_escape, {}),          # 11 ran from the everyday: window goes dark, down the stairs
-        (s3.v_laugh, {}),           # 12 you'll laugh at me: the group chat floods with www
-        (s3.v_wrong_truth, {}),     # 13 mistaken truth: TV wall news gets a CORRECTION
-        (s3.v_right_lie, {}),       # 14 correct lie: 100% HAPPY commercial ticks TRUE
-        (s3.v_cutout, {}),          # 15 cut-out answers: scissors, scrapbook
-        (s3.v_everyday, {}),        # 16 checking every day: day/night flip, calendar tears
+        (s5.a_soot, {}),           # 9  sooty four-and-a-half mats: laundry, boxes, dust
+        (s5.a_interference, {}),      # 10 the ultrasound she brought: only the cat hears it
+        (s5.a_lattice, {}),          # 11 ran from the everyday: window goes dark, down the stairs
+        (s5.a_mouth, {}),           # 12 you'll laugh at me: the group chat floods with www
+        (s5.a_truth_of_lies, {}),     # 13 mistaken truth: TV wall news gets a CORRECTION
+        (s5.a_lie_of_truths, {}),       # 14 correct lie: 100% HAPPY commercial ticks TRUE
+        (s5.a_cutouts, {}),          # 15 cut-out answers: scissors, scrapbook
+        (s5.a_ticks, {}),        # 16 checking every day: day/night flip, calendar tears
         # pre-chorus 1 -- the rooftop
         (s3.v_distant, {}),         # 17 gone far away: last train's lights shrink
         (s3.v_dusk, {}),            # 18 waited for the dark night: time-lapse dusk
@@ -113,7 +114,7 @@ def _line_shots(B):
         (s3.v_stagger, {}),         # 20 staggering on purpose: along the parapet, swaying
         # pre-chorus 2
         (s3.v_faraway, {}),         # 21 somewhere far: night highway, FAR AWAY sign
-        (s3.v_sink, {}),            # 22 just want to sink: phone sinks in the night sea
+        (s5.a_descent, {}),            # 22 just want to sink: phone sinks in the night sea
         (s3.v_noanswer, {}),        # 23 don't know the answer: empty exam room
         (s3.v_showroom, {"stop": 87.1}),   # 24 pointlessly pretty room; the stop
         # chorus 1
@@ -180,4 +181,4 @@ def _line_segs(lyrics, D, B) -> list[Seg]:
 def text_chars() -> str:
     """All non-lyric text the storyboard may draw (for the glyph atlas)."""
     return TITLE + ROMAJI + ARTIST + CREDIT + "ASCII PV  /  unofficial fan work for wowaka" + \
-        "☎☂☀♨〒☁※♪♥★◆○◎↑←→×✓▲▶°℃笑ツ_\\" + "❄雪◯⌫▮●↻≡¥" + "abcdefghijklmnopqrstuvwxyz"
+        "☎☂☀♨〒☁※♪♥★◆○◎↑←→×✓▲▶°℃笑ツ_\\" + "❄雪◯⌫▮●↻≡¥" + "→↗↑↖←↙↓↘◎≈°嘘本当正解正しい答え日常最前線草四畳半" + "abcdefghijklmnopqrstuvwxyz"
