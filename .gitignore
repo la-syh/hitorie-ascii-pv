@@ -16,3 +16,16 @@ __pycache__/
 
 # os
 .DS_Store
+
+# Reference / rendered media and exported captions
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.srt
+*.ass
+
+# Local credentials and editor configuration
+.env
+.env.*
+!.env.example

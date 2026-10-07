@@ -1,411 +1,254 @@
-# ascii-song — an ASCII-art PV for ヒトリエ「日常と地球の額縁」
+# hitorie-ascii-pv
 
-A music video made entirely of characters. Every frame is a 160 × 54 grid of
-text: letters, punctuation and kana. The grid is either rasterised to a
-1920 × 1080 / 30 fps MP4 or printed live in a terminal. The cuts follow a beat
-grid taken from the recording, and the lyrics come from the `.lrc` file at
-render time.
+日常と地球の額縁 · ASCII PV
 
-> Unofficial fan work. Song: ヒトリエ「日常と地球の額縁」(words & music: wowaka).
-> The recording and lyrics are **not** in this repository (see [Inputs](#inputs)).
+**用字符、节拍与文字构成的音乐影像。**
 
----
+**A music video built from characters, rhythm and typography.**
 
-## No-repeat pass + new Chinese captions
+[简体中文](#简体中文) · [English](#english)
 
-**Repeated lyrics, new pictures.** The last chorus has the same words as the
-first, and 高い高い (five times) and さ、おいでよ (three) keep coming back.
-Each recurrence now gets its own shot (`pv/scenes8.py`):
+## 简体中文
 
-| Line (recurrence) | First time | Now |
-|---|---|---|
-| 高い高いはどうだい (chorus 1) | tossed point | lanterns of text float up |
-| 高い高いもどうだい (chorus 2) | tossed point | an endless staircase |
-| さ、おいでよ (chorus 2) | curtain parts | a path of lights toward the dawn |
-| 期待しちゃいけないよ (last ×2) | quiz cards | a balloon of 期待 pops / 期待しない。 written out as punishment, the last slips |
-| 痛いくらいの才能 | needles | level meters driven into CLIP |
-| スポットライトぶっ壊して | cone shatters | a rig of lamps blows out one by one |
-| 高い高いでどうだい / はどうだい | tossed point | a chart that outgrows its axis / the city falls away below |
-| 逃げ道も無いよ | maze | every EXIT sign points back inside |
-| ここはただの球面上 | text globe | a flat map whose edges meet |
-| 痛いくらいの感情 | heart monitor | thermal camera |
-| 日常の顔は冷たいなあ | frost face | a wall of blank faces turns to us |
+这是为ヒトリエ《日常と地球の額縁》制作的非官方字符 PV 项目，词曲作者为 wowaka。画面由 Python 程序生成，不依赖 HTML、浏览器或视频剪辑软件。
 
-**Chinese captions.** `assets/subtitles.zh.json` is now a list of
-`{"ja", "zh"}` in LRC order, so repeated Japanese lines can be translated
-differently. `pv.render.load_translations` checks every row against the
-.lrc text and fails loudly on a mismatch. `tools/export_subtitles.py`
-writes `out/subtitles.zh.srt` from the same data.
+每帧是一张 160 列、54 行的字符网格：ASCII 符号、日文与文字纹理共同构成画面，再渲染为 1920 × 1080、30 fps 的视频。也可以直接在支持真彩色的终端中播放。
 
-Render: `python3 -m pv render --out out/pv-final.mp4`
+### 最终版的特点
 
-## Whole-video pass (abstract, line by line)
+- **逐句分镜**：65 行演唱歌词分别对应镜头，跟随本地 LRC 时间和音频节拍切换。
+- **抽象字符动画**：文字潮汐、波形、烟尘、万花筒、干涉纹、画框隧道和字符地球。
+- **重复歌词采用不同画面**：例如上升的文字灯笼、无尽阶梯、突破坐标轴的图表，以及逐盏熄灭的聚光灯。
+- **多种配色与排版**：黑白、红蓝、全彩与柔和色调随段落变化；问答、判定和重复劳动也成为视觉元素。
+- **独立中文字幕区**：中文字幕避开抖动、闪光和故障效果，另可导出日中双语 SRT。
+- **可复现的渲染流程**：按时间绘制帧，支持并行编码、分段缓存、静帧和总览图输出。
 
-The abstract / typographic style of the verses now runs through the whole
-video (`pv/scenes7.py`). Each shot keeps the literal meaning of its line, and
-neighbouring lines switch palette (ink, paper, red, blue, full colour,
-pastel). There are no flag-like motifs (no lone red disc on a white ground);
-the old model room and the red-ring stamp are gone.
+当前使用的分镜以 [`pv/storyboard.py`](pv/storyboard.py) 为准，主要调用 `scenes5.py` 至 `scenes8.py`。早期房间、人物和街景方案仍保留为代码素材，不代表最终版的完整画面。
 
-| Line | Shot |
-|---|---|
-| 遠くなった | text planes stream into a vanishing point; 遠 shrinks into the horizon |
-| 暗い暗い夜を待った | a wall of 暗 closes in on a dusk field of 夜, one step per beat |
-| ふと、色合い無くなった | a full-colour field drains to grey from the centre (色 → 無) |
-| わざわざフラつくんだ | フラつく set huge with every row sheared; the ruled lines tilt |
-| もう、遠いとこに行って | a violet floor of light rushes to the horizon |
-| 無駄に綺麗な部屋の中 | an empty, perfectly symmetric pastel room with a turning ornament; blackout at the stop |
-| 期待しちゃいけないよ | full-frame quiz cards (red / dark / terminal skins), mixed ○ × verdicts |
-| 痛いくらいの才能 | needles burst out of 才能 on every beat |
-| スポットライトぶっ壊して | a cone of 光 shatters on the hit |
-| 高い高い… | clouds and streaks rush down as a point is tossed higher each beat (five palettes) |
-| 逃げ道も無いよ…球面上 | a globe of text; a red path leaves START and returns to it (last time: it shrinks into a frame) |
-| 痛いくらいの感情？ | a heart monitor whose spikes outgrow the screen |
-| 日常の顔は冷たいなあ | a face of 日常 under creeping frost |
-| さ、おいでよ | a curtain of text parts on soft light — おいで |
-| Guitar solo | frame tunnel, kaleidoscope, spectral moiré and a text globe, every two bars, then a white burn-out |
-| B2: 遠くなった / 夜 / 擦れ違った / 躱して | a corridor of frames; star trails; two ribbons bowing around each other; rain parting round one point |
-| B2: 遠いとこ / 一人きり / 悲しそう / 道の底 | evening sea; a breathing glow; 悲 seen only through rain; a spiral road down to the break |
-| 二回目 / 三回目の失敗 | attempt bars, all failing at 99 % |
-| 単純作業 / 繰り返して | the same blue stamp, over and over; a Droste spiral |
-| 逃げ道は無いよ / 気づいているのでしょう | a maze with no exit; a huge eye that snaps to us |
-| 日常の顔を窺えば | a face glimpsed through blind slats |
-| Finale | a white void; the text globe shrinks inside a gilded ASCII frame — 日常と地球の額縁 |
+### 快速开始
 
-Quiz verdicts now alternate instead of running ✓✓✓ or ×××:
+需要 Python、NumPy、Pillow，以及命令行可用的 FFmpeg / FFprobe。推荐使用 Python 3.11 的 conda 环境；终端有声播放还需要 FFplay。
 
-- **where to go:** home ×, the sea ○, anywhere ×, null
-- **same as yesterday:** ○ × ○ ○ × ○
-- **exam:** ○ × ○ × ?
-- **expecting was a loss:** × then ○
-- **本当 stamps:** ○ × ○ ×
-
-Render this version:
+在克隆仓库并进入项目目录后运行：
 
 ```bash
-python3 -m pv render --out out/pv-whole.mp4
+conda create -n ascii-pv python=3.11 -y
+conda activate ascii-pv
+python -m pip install -r requirements.txt
+conda install -c conda-forge ffmpeg
 ```
 
-## Variety pass + question/answer lines
+自行准备歌曲音频和逐行定时歌词，并放在项目根目录（与 Makefile 同级）：
 
-Each verse line now has its own palette and grammar, so neighbouring lines
-never look alike (`pv/scenes6.py`):
+```text
+ヒトリエ - 日常と地球の額縁.flac
+ヒトリエ - 日常と地球の額縁.lrc
+```
 
-- message spiral (black)
-- a giant black oscillograph on red
-- an ink tide of 日常 against a red line on paper
-- a terminal quiz (black)
-- the laughter dune (black), its red burst and paper freeze
-- a huge stopwatch on paper
-- a full-colour kaleidoscope
-- soot
-- a spectral moiré
-- a paper grid ripped open by the red line
-- a red grin
-- 本当-of-嘘 judged ○ × ○ ×
-- the 嘘-of-正 stamp
-- cut-outs
-- a quiz show that keeps asking the same question
-
-Lines about answers, truth and expectation play as beat-cut question →
-answer → verdict sequences (`pv/quiz.py`, in three skins: exam sheet,
-terminal, quiz show):
-
-- 何処に行けば (where should I go) — terminal: home ×, the sea ○, anywhere ×, null
-- 確かめるだけの毎日 (checking every day) — quiz show: "same as yesterday?" / "yes" / ○, with the odd ×, faster each time
-- 答えわかんない (don't know the answer) — exam: ○ × ○ ×, the fifth only "?"
-- 期待したんが損 (expecting was a loss) — quiz show: "did you expect it?" / "YES" / ×, then "again?" / "NO" / ○
-
-## Abstract pass (verses 1–2 and the sinking)
-
-The two verses (lines 0–16) and the "sink" line (22) are no longer pictures
-of objects. They are moving images made of characters, in `pv/scenes5.py`,
-built on the field toolkit in `pv/abstract.py` (value noise, fbm, domain
-warp, colour gradients, text used as texture):
-
-- the message unspools from a red REC dot as a spiral of its own characters
-- the low hum is a sea of strokes heaving, with a pressure wave on each kick
-- a tide of 日常 glyphs presses against a red front line
-- a flow field that never settles
-- laughter falls like sand into a dune, then detonates and freezes mid-air
-- a river of timestamps; a kaleidoscope that re-seeds every half-beat
-- soot smoke out of which the four-and-a-half mats condense
-- ultrasound as a moiré of interfering rings
-- a red line tearing out of a lattice
-- a grin drawn in w's
-- 本当 written in tiny 嘘, and 嘘 written in tiny 正
-- answers cut out of a page of text
-- a wall of 365 days ticked by a wave
-- the descent: caustic light nets fading with depth, the sung characters
-  sinking and eroding into bubbles, one red point going down into black
-
-## Per-line scenes in one world (branch `per-line-redesign`)
-
-Every sung line is a small composed scene with a setting, props and one
-action on the beat. The scenes all take place in a single night's world, so
-the places recur and the PV tells a story: the message on the answering
-machine in her room, the escape into the city, sinking, the choruses' shrine,
-live house, Ferris wheel, arcade and snowy crossing, and the way back to the
-framed Earth on her wall. Shot sizes vary between wide, medium, close and
-overhead. The narrator is never drawn: she appears only as a red light, a red
-umbrella, a phone screen or a shape under the futon.
-
-Code: `pv/world.py` (the kit: sprites, skylines, apartment, trains, flap
-boards, clipping), plus the scenes in `pv/scenes2.py` (verse 1),
-`pv/scenes3.py` (verse 2, pre-choruses) and `pv/scenes4.py` (choruses,
-B section 2). The line-to-scene mapping, with a one-line description per
-line, is `_line_shots()` in `pv/storyboard.py`. `pv/shots.py` keeps the
-earlier single-symbol shots and the shared helpers.
-
-| section | places |
-|---|---|
-| verse 1 | her room at night (answering machine, corkboard of jokes blown out the window, sitcom on the TV) → rush-hour platform → departure board that can't settle → inside the last train, windows flicking between landscapes |
-| verse 2 | the sooty four-and-a-half mats → the radio only the cat hears → her window goes dark, a red light slips down the stairs → group chat floods with www → TV-wall news CORRECTION / 100% HAPPY ad → scissors and scrapbook → day/night flipping over the calendar |
-| pre-chorus | rooftop: the last train recedes, dusk time-lapse, neon street drains to grey, walking the parapet · night highway → phone sinking in the sea → empty exam room → model room, the stop |
-| chorus 1 | shrine fortune 大凶 → live house → spotlight shatters → Ferris wheel → route round the Earth comes back home → crane game drops the prize → typing and deleting "大丈夫" → snowy crossing, one red umbrella → inside the gondola → last train's doors open |
-| B section 2 | rear window → empty platform, moths → an express blasts through → against the crowd → seaside line, lighthouse → 3 a.m. futon → rain on the window → underpass |
-| chorus 2 | GAME OVER → crane slips → konbini register → laundromat → loop line, next stop always 日常 → security monitors show every place, the camera turns to us → CONTINUE? NO → light switch OFF → the crossing through the blinds → red balloon at dawn → doors |
-| last chorus | the chorus-1 places again, pulling back from the Earth into its frame on the wall |
-
-## Enhanced edition (2026-10-07)
-
-The enhanced render is `out/pv-enhanced-zh.mp4` (1080p / 30 fps). The
-original `out/pv.mp4` is retained. `out/subtitles.zh.srt` contains bilingual
-subtitles; Chinese in the video is burned in and needs no player setup.
-The translation is an original interpretive translation of the supplied LRC,
-not an official translation. Source audio and Japanese LRC are unchanged.
-
-The four-mat room now has books, a low desk, a mug, curtains, a sliding door,
-a hanging lamp and oblique window light. Verse two cuts between the room,
-a window-side close-up, a cracked mirror and a desk of cut-out answers.
-The original character now has a hair clip, sailor collar, facial detail and
-clothing texture. Later shots show a moonlit portrait, an empty clean room,
-and three framed selves repeating the same task. The instrumental alternates
-between the answering machine, portrait, clock and Earth rather than a date counter.
-
-Reference: the supplied `world.execute(me).mp4` (visual hierarchy / caption
-separation) and the supplied 11-person tribute PV (framed collage / repeated
-figures / object montage). Drawings are original procedural character art;
-no reference-video frames are embedded in the output. The reference edit has
-a different duration, so timing always follows the local Hitorie recording.
-
-Chinese strings are editable in `assets/subtitles.zh.json`, keyed by the
-original Japanese lines. Fusion Pixel 12px supplies missing Chinese glyphs;
-its license is in `assets/fonts/OFL-FusionPixel.txt`. Captions follow LRC
-line timings, including instrumental gaps, and stay clear of glitch/flash effects.
-
-Render using the local conda environment:
+然后检查输入并渲染：
 
 ```bash
-conda run -n ML python -m pv render --workers 4 --preset fast --out out/pv-enhanced-zh.mp4
-conda run -n ML python -m pv sheet --every 5 --out out/redesign-contact-sheet.png
-conda run -n ML python tools/check_redesign.py
-conda run -n ML python tools/export_subtitles.py
+python tools/check_inputs.py
+python -m pv render --workers 4 --preset fast --out out/pv-final.mp4
 ```
 
-## Quick start
+默认输出 H.264 视频和 AAC 双声道音频，完整时长约 3 分 46 秒。渲染耗时取决于机器性能与参数；首次运行会分析音频。内存紧张时可减少 `--workers`。
 
-Prerequisites: **Python 3.9+** and **FFmpeg** (`brew install ffmpeg` on macOS,
-`apt install ffmpeg` on Debian/Ubuntu).
+**这是针对特定歌曲和录音版本制作的 PV，不是任意歌曲的自动 MV 生成器。** 分镜按原录音和 65 行歌词设计；替换版本时需检查时序，并同步修改字幕和分镜映射。
+
+### 常用命令
+
+在已激活的 conda 环境中，从项目根目录执行：
+
+| 用途 | 命令 |
+|---|---|
+| 分析音频 | `python -m pv analyze` |
+| 查看分镜时间表 | `python -m pv info` |
+| 低分辨率预览 | `python -m pv render --scale 0.5 --workers 4 --out out/preview.mp4` |
+| 仅渲染一段 | `python -m pv render --start 89.5 --end 112.5 --out out/chorus.mp4` |
+| 导出指定时刻的静帧 | `python -m pv still 52 94.6 173 216` |
+| 生成全片总览图 | `python -m pv sheet --every 5 --out out/contact-sheet.png` |
+| 终端播放 | `python -m pv play --start 89.5` |
+| 导出双语字幕 | `python tools/export_subtitles.py` |
+| 检查字幕、镜头边界和确定性 | `python tools/check_redesign.py` |
+| 估算全屏亮度变化 | `python tools/flash_check.py` |
+
+输入也可以显式指定，全局参数需放在子命令之前：
 
 ```bash
-# put the two input files in the project root (next to the Makefile):
-#   ヒトリエ - 日常と地球の額縁.flac
-#   ヒトリエ - 日常と地球の額縁.lrc
-
-make setup     # creates .venv and installs numpy + Pillow
-make check     # verifies ffmpeg, packages, input files (+ sha256), fonts
-make render    # -> out/pv.mp4   (1920x1080, 30 fps, H.264 + AAC stereo)
+python -m pv --audio /path/to/song.flac --lrc /path/to/song.lrc render --out out/pv-final.mp4
 ```
 
-The full render takes about 4–15 minutes, depending on the number of CPU cores
-(4½ minutes with 3 workers on a 4-core arm64 Linux VM). The result is about
-190 MB (H.264 at roughly 6.7 Mbit/s, with AAC stereo audio).
-Frames are drawn in parallel worker processes and piped straight into FFmpeg,
-so no frame files are written to disk. The video is encoded in 20-second
-chunks, cached in `build/segments/<key>/`, and then joined and muxed with the
-audio in a single pass. If a render is interrupted, run `make render` again and
-it picks up where it stopped. The cache key is a hash of the code, assets,
-inputs and settings, so editing a scene never reuses a stale chunk.
+完整渲染按约 20 秒分段，缓存在 `build/segments/`。中断后重复同一命令可复用已完成片段；修改代码、字幕或参数通常会生成新缓存。更换音频时应先执行 `python -m pv analyze`，刷新音频分析。
 
-### All commands
+终端播放需要至少 160 列、54 行的画面空间，以及支持 24 位颜色的终端。字幕和静帧默认输出到 `out/`。Makefile 仍可使用，例如 `make PY=python render`；在 conda 中无需再执行会另建虚拟环境的 `make setup`。
 
-| command | what it does |
-|---|---|
-| `make setup` | `python3 -m venv .venv` + `pip install -r requirements.txt` |
-| `make check` | pre-flight check (`tools/check_inputs.py`) |
-| `make analyze` | beat/tempo/feature analysis → `build/analysis.{json,npz}` (runs automatically if missing) |
-| `make info` | prints the storyboard (scene list with start/end times) |
-| `make render` | full-quality video → `out/pv.mp4` (`WORKERS=3` sets parallelism; `ARGS="--max-time 120"` stops early so you can resume later) |
-| `make preview` | fast 960 × 540 draft → `out/preview_540p.mp4` |
-| `make sheet` | contact sheet, one frame every 2.5 s → `out/contact_sheet.png` |
-| `make stills` | a set of PNG stills → `out/stills/` |
-| `make play` | **plays the PV as live text in your terminal**, with audio via `ffplay` |
-| `make clean` | deletes the generated `build/` and `out/` folders |
+### 工作原理
 
-You can also run the commands without `make`:
+1. **音频分析**：FFmpeg 解码音频，NumPy 计算频谱、起音强度、频段能量和节拍。
+2. **时间轴与分镜**：LRC 提供歌词行的开始时间，`storyboard.py` 选择场景与镜头参数。
+3. **字符画面**：场景函数根据时间和音频特征，向字符网格写入字形、前景色与背景色。
+4. **像素渲染**：字体图集将字符转换为像素，叠加辉光、扫描线等后期效果，再保护字幕区。
+5. **视频编码**：工作进程生成画面，FFmpeg 编码并合入原录音。终端播放器则直接输出 ANSI 真彩色字符。
 
-```bash
-python3 -m pv render --out out/pv.mp4            # --start/--end (s), --scale, --crf, --workers
-python3 -m pv render --start 89.5 --end 112.5    # render only the first chorus
-python3 -m pv still 94.6 100 216                 # PNG stills at song times (seconds)
-python3 -m pv play --start 89.5                  # terminal playback from the chorus
-python3 tools/flash_check.py                     # photosensitivity check (flashes per second)
-```
+歌词逐字动画是基于行时间的视觉估算，并非逐字人工对齐。`flash_check.py` 是亮度变化的近似检查，不是完整的光敏安全认证；画面包含闪烁和高对比度切换。
 
-For `play`, the terminal must be at least 160 × 54 cells and support 24-bit
-colour (iTerm2, kitty, WezTerm, recent macOS Terminal). Make the font smaller
-until the picture fits.
+### 修改画面与字幕
 
----
+- 分镜入口：[`pv/storyboard.py`](pv/storyboard.py) 中的 `_line_shots()`。
+- 当前主场景：[`pv/scenes5.py`](pv/scenes5.py)、[`pv/scenes6.py`](pv/scenes6.py)、[`pv/scenes7.py`](pv/scenes7.py)、[`pv/scenes8.py`](pv/scenes8.py)。
+- 抽象图形与问答组件：[`pv/abstract.py`](pv/abstract.py)、[`pv/quiz.py`](pv/quiz.py)。
+- 中文字幕：[`assets/subtitles.zh.json`](assets/subtitles.zh.json)，按 LRC 顺序保存 `ja` 和 `zh` 字段；重复歌词可对应不同译文。加载器会核对行数和日文内容，不匹配时明确报错。
+- 修改后先导出静帧或短片检查，再进行完整渲染；字幕更新后重新运行 `tools/export_subtitles.py`。
 
-## Inputs
+### 目录结构
 
-| file | sha256 |
-|---|---|
-| `ヒトリエ - 日常と地球の額縁.flac` (44.1 kHz, 5.1, 3:46) | `384e3f8a…4a611d` |
-| `ヒトリエ - 日常と地球の額縁.lrc` (line-timed lyrics) | `b72c9178…dd9f4` |
-
-The full hashes are in `inputs.sha256`. Both files are listed in `.gitignore`
-because the recording and lyrics are copyrighted and the audio is 70 MB. Any
-`.flac` and `.lrc` in the project root are picked up automatically, or you can
-pass `--audio` and `--lrc`. The 5.1 audio is downmixed to stereo AAC in the
-output.
-
-The storyboard times were set by hand against this recording. A different
-master of the song will still render, but the cuts may drift.
-
----
-
-## How it works
-
-```
- .flac ──ffmpeg──► mono PCM ──► STFT ─► onset envelope ─► tempo (autocorr.) ─► DP beat tracker
-                                   └──► band energies (low/mid/high), 32-band spectrum
- .lrc  ──► timed lines (char-by-char reveal over the sung duration)
-                                   │
- storyboard.py  (scene list, cut on beats/downbeats)          build/analysis.*
-                                   ▼
- scenes.py  draw(t) ──► character grid  (glyph index + fg/bg colour per cell)
-                                   │
-                     ┌─────────────┴──────────────┐
-            raster.py: glyph atlas gather,    player.py: ANSI truecolor
-            glow, scanlines → RGB24 ─► ffmpeg  text in the terminal
-```
-
-* **Audio analysis** (`pv/audio.py`) uses only numpy: an STFT, a log-band
-  spectral-flux onset envelope, autocorrelation tempo estimation, and an Ellis
-  style dynamic-programming beat tracker. The song comes out at **152 BPM**
-  (552 beats; bars about 1.58 s long). Lyric lines start about half a beat
-  before the downbeat, as pickups. The bar phase is anchored on a downbeat
-  annotated by hand: the band hit at the start of the first chorus, at 90.00 s.
-* **Rendering** (`pv/canvas.py`, `pv/raster.py`): the font is pre-rendered
-  into a glyph atlas, with CJK characters stored as two half-cells. Turning the
-  grid into pixels is then a single numpy gather. Large lyrics are drawn as
-  "structural" ASCII: solid cells are filled with `#`, and edge cells get
-  `_ " | / \` chosen from the local gradient, so the kanji stay readable at
-  about 10 rows tall.
-* **Determinism.** Every scene is a pure function of time: random choices use
-  RNGs seeded from the beat index, and nothing is simulated from frame to
-  frame. That is why frames can render in parallel and in any order, and why
-  `still`, `render` and `play` all show the same picture. The font
-  (BIZ UDGothic) and the Earth land mask are committed, and the analysis is
-  cached in `build/`. As a check, stills rendered on two different machines
-  (x86-64 with Python 3.13 and NumPy 2.5, and arm64 with Python 3.10 and NumPy
-  2.2) came out bit-identical.
-* **Photosensitivity.** The PV flips between black and white on the beat.
-  `tools/flash_check.py` measures the result at no more than 2.5 full-screen
-  flashes in any one-second window, under the common 3-per-second guideline.
-
----
-
-## Concept: frames, the everyday, and the Earth
-
-The title is 日常と地球の額縁, "the picture frame of the everyday and the
-Earth", so the **picture frame (額縁)** is the main motif. It draws itself
-around the screen in the intro, turns into a tunnel of frames during the guitar
-solo, and in the last shot the camera pulls back out of the spinning Earth to
-show that it has been a framed picture on the wall of the narrator's small room
-all along.
-
-Ideas taken from wowaka and from what has been written about him:
-
-* **Monochrome.** wowaka drew his own VOCALOID-era thumbnails as simple
-  black-and-white single illustrations, and never used the VOCALOID character
-  herself ([niconico 大百科](https://dic.nicovideo.jp/a/wowaka),
-  [pixiv 百科事典](https://dic.pixiv.net/a/wowaka)). The PV uses only ink black
-  and paper white, swapped on the beat, plus one accent red.
-* **A girl as the protagonist.** Each of his songs had an adolescent girl as
-  its protagonist. Here that is an original silhouette with a bob haircut and a
-  skirt, built from signed-distance shapes. She sits in a sooty
-  four-mat room, sinks, runs on the globe and sleeps inside a frame.
-* **Speed and bounce.** His style has been described as fast, quirky beats,
-  an "over-compressed" band sound, and syllables that bounce on っ and ん
-  ([ぴあ](https://lp.p.pia.jp/article/news/48033/index.html)). The PV answers
-  with hard cuts on line starts, a camera shake on the kick, and lyric
-  characters that hop up in red at the moment each one is sung.
-* **The song's own story.** 日常と地球の額縁 was first released as a new
-  track on wowaka's album *アンハッピーリフレイン* (Unhappy Refrain, 2011-05-18).
-  Seven years later Hitorie recorded it as a band, live in the studio, for the
-  single *ポラリス* (Polaris, 2018-11-28). It was the first wowaka VOCALOID
-  composition on a Hitorie release
-  ([ナタリー](https://natalie.mu/music/news/305562),
-  [Wikipedia](https://en.wikipedia.org/wiki/Polaris_(Hitorie_single)),
-  [pixiv 百科事典](https://dic.pixiv.net/a/%E6%97%A5%E5%B8%B8%E3%81%A8%E5%9C%B0%E7%90%83%E3%81%AE%E9%A1%8D%E7%B8%81)).
-  The instrumental now reprises objects from the lyric narrative. The credits end "for wowaka", who died in April 2019.
-
-### Storyboard
-
-| time (s) | section | scene |
-|---|---|---|
-| 0.00–13.22 | intro (guitar alone) | REC light and time code; a single low-frequency signal line; the frame draws itself clockwise; build-up noise |
-| 13.22–26.01 | intro (band) | title in big structural ASCII inside a gilded frame; the Earth turning behind it |
-| 26.01–38.55 | intro | the Earth, frames emanating outward, the title orbiting as a ring of text; dive into the globe |
-| 38.55–51.30 | verse 1 | answering machine and LCD counter; a timestamped transcript; jokes burst out of the speaker; then "everything changes" glitch inversions |
-| 51.30–64.10 | verse 2 | sooty four-mat room; ultrasound ripples; `wwww` laughter scribbled on the walls; mirrored truths and lies; cut-out squares stamped OK; lyrics written vertically (tategaki) |
-| 64.10–76.70 | pre-chorus 1 | the room recedes into a small frame in the night; colour drains; the picture sways |
-| 76.70–89.50 | pre-chorus 2 | walking toward the horizon; sinking with bubbles; question marks; the "pointlessly beautiful" clean room; the stop |
-| 89.50–112.43 | chorus 1 | beat-flipped big lyrics; a spotlight smashed into flying shards; rising through speed lines; running on the Earth; a cold clock face; a door-frame opens |
-| 112.43–141.00 | guitar solo | endless frame tunnel with a ring spectrum around the globe, then a montage of the phone, portrait, clock and Earth |
-| 141.00–153.60 | B section 2 | night street, a crowd walking the other way; someone brushes past; she sidesteps |
-| 153.60–166.82 | B section 2 | the road at night; sleeping alone inside a frame; rain; the road tipping down to its bottom |
-| 166.82–193.60 | chorus 2 | FAILURE 02 / 03 counters with a red X; three framed portraits of repeated work; the globe; the clock peeking in |
-| 193.60–214.58 | last chorus | the chorus-1 imagery again, more intense; pull back to the whole globe |
-| 214.58–221.30 | ending | out of the Earth, into the frame on the wall of her room: 日常と地球の額縁 |
-| 221.30–226.39 | silence | credits |
-
----
-
-## Project layout
-
-```
+```text
 pv/
-  audio.py       numpy-only analysis (STFT, onsets, tempo, beat tracking, features)
-  lrc.py         LRC parser (handles NetEase-style JSON credit lines)
-  timeline.py    beat/bar grid + per-frame context passed to scenes
-  glyphs.py      glyph atlas (half-width + double-width CJK)
-  canvas.py      character grid + drawing primitives (text, lines, fields, big text)
-  shapes.py      globe, picture frame, figure, clock, seven-segment, glitches
-  motifs.py      room, answering machine, spotlight, frame tunnel, shatter, waves
-  lyricfx.py     lyric typography (decode, big, vertical, transcript)
-  scenes.py      the scenes
-  storyboard.py  what plays when (timings; no lyric text stored)
-  raster.py      grid → pixels, glow/scanlines/vignette
-  render.py      parallel renderer → ffmpeg
-  player.py      terminal playback
-  __main__.py    CLI
-assets/fonts/    BIZ UDGothic Regular/Bold (SIL OFL 1.1, see OFL.txt)
-assets/earth_mask.txt   360×180 land mask from Natural Earth (public domain)
-tools/           check_inputs.py, flash_check.py, make_earth_mask.py
+  audio.py          音频分析
+  lrc.py            歌词解析
+  timeline.py       节拍与场景上下文
+  storyboard.py     分镜与逐句映射
+  scenes5.py–8.py    最终版主要场景
+  abstract.py       抽象图形与颜色场
+  quiz.py           问答和判定画面
+  canvas.py         字符网格与绘图接口
+  glyphs.py         字体图集
+  lyricfx.py        歌词排版与动画
+  raster.py         字符转像素与后期处理
+  render.py         并行渲染与编码
+  player.py         终端播放器
+assets/
+  fonts/            字体与各自许可证
+  earth_mask.txt    地球陆地掩模
+  subtitles.zh.json 日中字幕数据
+tools/             检查、字幕导出与资源生成工具
 ```
 
-## Credits
+### 致谢与发布范围
 
-* Song: ヒトリエ「日常と地球の額縁」, words & music by wowaka. All rights belong
-  to their holders. This PV is an unofficial, non-commercial fan work.
-* Font: [BIZ UDGothic](https://github.com/googlefonts/morisawa-biz-ud-gothic)
-  by Morisawa, under the SIL Open Font License 1.1 (`assets/fonts/OFL.txt`).
-* Land mask: [Natural Earth](https://www.naturalearthdata.com/) `ne_110m_land`
-  (public domain). You can rebuild it with `tools/make_earth_mask.py`.
-* The scenes, the girl's silhouette and all the drawings are original and drawn
-  procedurally. No artwork from the original releases or videos is reproduced.
+- **歌曲**：ヒトリエ《日常と地球の額縁》，词曲 wowaka。本项目为非官方同人作品。
+- **字体**：[BIZ UDGothic](https://github.com/googlefonts/morisawa-biz-ud-gothic) 与 [Fusion Pixel](https://github.com/TakWolf/fusion-pixel-font)，许可证分别保留在 [`OFL.txt`](assets/fonts/OFL.txt) 和 [`OFL-FusionPixel.txt`](assets/fonts/OFL-FusionPixel.txt)。
+- **地球数据**：[Natural Earth](https://www.naturalearthdata.com/) 陆地数据，公共领域；可通过 `tools/make_earth_mask.py` 重建。
+- **视觉参考**：本地提供的 `world.execute(me).mp4` 与 [《日常と地球の額縁》11 人 PV 合作](https://www.bilibili.com/video/BV1ZV4y1S7Q9)。参考用于构图与节奏，渲染不需要这些参考视频。
+
+音频、外部 LRC、参考视频、成片和缓存不随源码提交；输入文件的参考校验值保存在 [`inputs.sha256`](inputs.sha256)。但 **`assets/subtitles.zh.json` 含完整日文歌词与中文翻译，部分场景代码也含歌词片段**，因此不能把本仓库描述为“完全不含歌词”。代码的开源许可不代表歌曲、歌词、翻译或字体都适用同一许可。
+
+**代码许可证尚未选定；当前仓库未提供代码 LICENSE。** 发布时应单独明确代码许可及第三方内容的范围。
+
+---
+
+## English
+
+An unofficial character-art PV for Hitorie's **日常と地球の額縁**, written and composed by wowaka. Python generates the visuals; no HTML, browser or video-editing application is required.
+
+Each frame is a 160-column, 54-row character grid. ASCII symbols, Japanese glyphs and text textures form the image, rendered to **1920 × 1080 at 30 fps**. The same scene engine can also play directly in a true-colour terminal.
+
+### Features of the final version
+
+- **A shot for every sung line:** 65 lyric lines mapped to scenes and timed against the local LRC and recording.
+- **Abstract character animation:** typographic tides, waveforms, soot, kaleidoscopes, interference patterns, frame tunnels and a text globe.
+- **New imagery for recurring lyrics:** rising text lanterns, endless stairs, a chart exceeding its axes and a lighting rig extinguishing lamp by lamp.
+- **Varied palettes and layouts:** monochrome, red, blue, full colour and pastel; questions, verdicts and repetition become visual material.
+- **Protected Chinese captions:** a caption strip kept clear of shake, flashes and glitches, plus bilingual Japanese/Chinese SRT export.
+- **Time-based rendering:** parallel encoding, resumable segment caches, still frames and contact sheets.
+
+[`pv/storyboard.py`](pv/storyboard.py) defines the active edit, primarily using `scenes5.py` through `scenes8.py`. Earlier room, character and street scenes remain in the source as reusable material; they are not a description of the entire final edit.
+
+### Quick start
+
+You need Python, NumPy, Pillow and FFmpeg / FFprobe on your command path. A Python 3.11 conda environment is recommended. Terminal playback with sound also requires FFplay.
+
+After cloning the repository and entering its directory:
+
+```bash
+conda create -n ascii-pv python=3.11 -y
+conda activate ascii-pv
+python -m pip install -r requirements.txt
+conda install -c conda-forge ffmpeg
+```
+
+Supply your own recording and line-timed lyrics in the project root, next to the Makefile:
+
+```text
+ヒトリエ - 日常と地球の額縁.flac
+ヒトリエ - 日常と地球の額縁.lrc
+```
+
+Check the inputs and render:
+
+```bash
+python tools/check_inputs.py
+python -m pv render --workers 4 --preset fast --out out/pv-final.mp4
+```
+
+The output contains H.264 video and stereo AAC audio, lasting approximately 3 minutes 46 seconds. Rendering time depends on your hardware and settings. The first run analyses the audio; reduce `--workers` if memory is limited.
+
+**This is a bespoke PV for one song and recording, not an automatic music-video generator for arbitrary songs.** The storyboard expects 65 lyric lines. A different recording or LRC may require changes to timing, captions and shot mapping.
+
+### Commands
+
+Run these from the project root in the activated environment:
+
+| Purpose | Command |
+|---|---|
+| Analyse audio | `python -m pv analyze` |
+| Print the storyboard | `python -m pv info` |
+| Low-resolution preview | `python -m pv render --scale 0.5 --workers 4 --out out/preview.mp4` |
+| Render a section | `python -m pv render --start 89.5 --end 112.5 --out out/chorus.mp4` |
+| Export stills at song times | `python -m pv still 52 94.6 173 216` |
+| Generate a contact sheet | `python -m pv sheet --every 5 --out out/contact-sheet.png` |
+| Play in the terminal | `python -m pv play --start 89.5` |
+| Export bilingual SRT | `python tools/export_subtitles.py` |
+| Check captions, boundaries and determinism | `python tools/check_redesign.py` |
+| Estimate full-frame luminance changes | `python tools/flash_check.py` |
+
+To specify input paths, place global options before the subcommand:
+
+```bash
+python -m pv --audio /path/to/song.flac --lrc /path/to/song.lrc render --out out/pv-final.mp4
+```
+
+Full renders are encoded in approximately 20-second chunks under `build/segments/`. Repeat the same command to reuse completed chunks after an interruption. Code, caption and setting changes generally produce a new cache. When replacing the recording, run `python -m pv analyze` first to refresh the audio analysis.
+
+Terminal playback needs space for at least 160 columns and 54 rows, plus 24-bit colour support. Generated files go under `out/`. The Makefile remains available, for example `make PY=python render`; conda users do not need `make setup`, which creates a separate virtual environment.
+
+### How it works
+
+1. **Audio analysis:** FFmpeg decodes the recording; NumPy extracts spectra, onset strength, frequency-band energy and beats.
+2. **Timeline and storyboard:** LRC timestamps identify sung lines; `storyboard.py` chooses the scene and its parameters.
+3. **Character drawing:** scene functions write glyphs and foreground/background colours into a grid using time and audio features.
+4. **Rasterisation:** a font atlas turns the grid into pixels, with glow, scanlines and other post-processing. The caption strip is protected from these effects.
+5. **Encoding:** worker processes generate frames; FFmpeg encodes them and muxes the recording. The terminal player instead emits ANSI true-colour text.
+
+Per-character lyric reveals are visual estimates from line timestamps, not manually aligned word timings. `flash_check.py` is an approximate luminance check, not a comprehensive photosensitivity certification. The visuals contain flashes and high-contrast cuts.
+
+### Editing and source layout
+
+| File / directory | Purpose |
+|---|---|
+| `pv/storyboard.py` | Active storyboard; `_line_shots()` maps lyrics to shots |
+| `pv/scenes5.py` through `pv/scenes8.py` | Main scenes used in the final edit |
+| `pv/abstract.py`, `pv/quiz.py` | Abstract fields, colour tools, questions and verdicts |
+| `pv/audio.py`, `pv/lrc.py`, `pv/timeline.py` | Audio features, lyric parsing and musical time |
+| `pv/canvas.py`, `pv/glyphs.py` | Character-grid drawing and font atlas |
+| `pv/lyricfx.py` | Lyric layout and animation |
+| `pv/raster.py`, `pv/render.py` | Post-processing, parallel rendering and encoding |
+| `pv/player.py` | Terminal playback |
+| `assets/fonts/` | Bundled fonts and their licenses |
+| `assets/earth_mask.txt` | Earth land mask |
+| `assets/subtitles.zh.json` | Ordered Japanese/Chinese caption pairs |
+| `tools/` | Checks, subtitle export and asset-generation utilities |
+
+Captions are an ordered list of `ja` and `zh` fields matching the LRC. Repeated Japanese lines may have different translations. The loader validates both line count and Japanese text, and reports mismatches. After edits, inspect stills or short clips before rendering the full video; rerun `tools/export_subtitles.py` to refresh the SRT.
+
+### Credits and distribution scope
+
+- **Song:** Hitorie, 日常と地球の額縁; words and music by wowaka. This is an unofficial fan project.
+- **Fonts:** [BIZ UDGothic](https://github.com/googlefonts/morisawa-biz-ud-gothic) and [Fusion Pixel](https://github.com/TakWolf/fusion-pixel-font). Their licenses are preserved in [`OFL.txt`](assets/fonts/OFL.txt) and [`OFL-FusionPixel.txt`](assets/fonts/OFL-FusionPixel.txt).
+- **Earth data:** public-domain land data from [Natural Earth](https://www.naturalearthdata.com/), rebuildable with `tools/make_earth_mask.py`.
+- **Visual references:** the locally supplied `world.execute(me).mp4` and the [11-person tribute PV](https://www.bilibili.com/video/BV1ZV4y1S7Q9). These informed composition and rhythm; the renderer does not require the reference videos.
+
+The recording, external LRC, reference videos, rendered videos and caches are excluded from source commits. Reference input checksums are recorded in [`inputs.sha256`](inputs.sha256). However, **`assets/subtitles.zh.json` contains the full Japanese lyrics and Chinese translations, and some scene code includes lyric excerpts**. The repository must therefore not be described as containing no lyrics. A code license does not automatically license the music, lyrics, translations or fonts on the same terms.
+
+**A source-code license has not yet been selected; this repository currently has no code LICENSE file.** Specify the code license and third-party content scope separately when publishing.
