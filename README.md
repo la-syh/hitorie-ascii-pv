@@ -4,17 +4,13 @@
 
 **用字符、节拍与文字构成的音乐影像。**
 
-**A music video built from characters, rhythm and typography.**
-
-[简体中文](#简体中文) · [English](#english)
-
-## 简体中文
+**简体中文** · [English](README.en.md)
 
 这是为ヒトリエ《日常と地球の額縁》制作的非官方字符 PV 项目，词曲作者为 wowaka。画面由 Python 程序生成，不依赖 HTML、浏览器或视频剪辑软件。
 
 每帧是一张 160 列、54 行的字符网格：ASCII 符号、日文与文字纹理共同构成画面，再渲染为 1920 × 1080、30 fps 的视频。也可以直接在支持真彩色的终端中播放。
 
-### 最终版的特点
+## 最终版的特点
 
 - **逐句分镜**：65 行演唱歌词分别对应镜头，跟随本地 LRC 时间和音频节拍切换。
 - **抽象字符动画**：文字潮汐、波形、烟尘、万花筒、干涉纹、画框隧道和字符地球。
@@ -25,7 +21,7 @@
 
 当前使用的分镜以 [`pv/storyboard.py`](pv/storyboard.py) 为准，主要调用 `scenes5.py` 至 `scenes8.py`。早期房间、人物和街景方案仍保留为代码素材，不代表最终版的完整画面。
 
-### 快速开始
+## 快速开始
 
 需要 Python、NumPy、Pillow，以及命令行可用的 FFmpeg / FFprobe。推荐使用 Python 3.11 的 conda 环境；终端有声播放还需要 FFplay。
 
@@ -56,7 +52,7 @@ python -m pv render --workers 4 --preset fast --out out/pv-final.mp4
 
 **这是针对特定歌曲和录音版本制作的 PV，不是任意歌曲的自动 MV 生成器。** 分镜按原录音和 65 行歌词设计；替换版本时需检查时序，并同步修改字幕和分镜映射。
 
-### 常用命令
+## 常用命令
 
 在已激活的 conda 环境中，从项目根目录执行：
 
@@ -83,7 +79,7 @@ python -m pv --audio /path/to/song.flac --lrc /path/to/song.lrc render --out out
 
 终端播放需要至少 160 列、54 行的画面空间，以及支持 24 位颜色的终端。字幕和静帧默认输出到 `out/`。Makefile 仍可使用，例如 `make PY=python render`；在 conda 中无需再执行会另建虚拟环境的 `make setup`。
 
-### 工作原理
+## 工作原理
 
 1. **音频分析**：FFmpeg 解码音频，NumPy 计算频谱、起音强度、频段能量和节拍。
 2. **时间轴与分镜**：LRC 提供歌词行的开始时间，`storyboard.py` 选择场景与镜头参数。
@@ -93,7 +89,7 @@ python -m pv --audio /path/to/song.flac --lrc /path/to/song.lrc render --out out
 
 歌词逐字动画是基于行时间的视觉估算，并非逐字人工对齐。`flash_check.py` 是亮度变化的近似检查，不是完整的光敏安全认证；画面包含闪烁和高对比度切换。
 
-### 修改画面与字幕
+## 修改画面与字幕
 
 - 分镜入口：[`pv/storyboard.py`](pv/storyboard.py) 中的 `_line_shots()`。
 - 当前主场景：[`pv/scenes5.py`](pv/scenes5.py)、[`pv/scenes6.py`](pv/scenes6.py)、[`pv/scenes7.py`](pv/scenes7.py)、[`pv/scenes8.py`](pv/scenes8.py)。
@@ -101,7 +97,7 @@ python -m pv --audio /path/to/song.flac --lrc /path/to/song.lrc render --out out
 - 中文字幕：[`assets/subtitles.zh.json`](assets/subtitles.zh.json)，按 LRC 顺序保存 `ja` 和 `zh` 字段；重复歌词可对应不同译文。加载器会核对行数和日文内容，不匹配时明确报错。
 - 修改后先导出静帧或短片检查，再进行完整渲染；字幕更新后重新运行 `tools/export_subtitles.py`。
 
-### 目录结构
+## 目录结构
 
 ```text
 pv/
@@ -125,7 +121,7 @@ assets/
 tools/             检查、字幕导出与资源生成工具
 ```
 
-### 致谢与发布范围
+## 致谢与发布范围
 
 - **歌曲**：ヒトリエ《日常と地球の額縁》，词曲 wowaka。本项目为非官方同人作品。
 - **字体**：[BIZ UDGothic](https://github.com/googlefonts/morisawa-biz-ud-gothic) 与 [Fusion Pixel](https://github.com/TakWolf/fusion-pixel-font)，许可证分别保留在 [`OFL.txt`](assets/fonts/OFL.txt) 和 [`OFL-FusionPixel.txt`](assets/fonts/OFL-FusionPixel.txt)。
@@ -134,121 +130,10 @@ tools/             检查、字幕导出与资源生成工具
 
 音频、外部 LRC、参考视频、成片和缓存不随源码提交；输入文件的参考校验值保存在 [`inputs.sha256`](inputs.sha256)。但 **`assets/subtitles.zh.json` 含完整日文歌词与中文翻译，部分场景代码也含歌词片段**，因此不能把本仓库描述为“完全不含歌词”。代码的开源许可不代表歌曲、歌词、翻译或字体都适用同一许可。
 
-**代码许可证尚未选定；当前仓库未提供代码 LICENSE。** 发布时应单独明确代码许可及第三方内容的范围。
+## 许可证
 
----
+本项目的原创程序代码采用 [MIT License](LICENSE)，版权署名为 `2026 la-syh`。
 
-## English
+MIT 许可不涵盖歌曲录音、日文歌词、中文译文、参考视频，以及代码中引用的歌词片段。`assets/subtitles.zh.json` 不在 MIT 授权范围内。字体沿用各自附带的 SIL Open Font License；Natural Earth 数据保持公共领域属性。
 
-An unofficial character-art PV for Hitorie's **日常と地球の額縁**, written and composed by wowaka. Python generates the visuals; no HTML, browser or video-editing application is required.
-
-Each frame is a 160-column, 54-row character grid. ASCII symbols, Japanese glyphs and text textures form the image, rendered to **1920 × 1080 at 30 fps**. The same scene engine can also play directly in a true-colour terminal.
-
-### Features of the final version
-
-- **A shot for every sung line:** 65 lyric lines mapped to scenes and timed against the local LRC and recording.
-- **Abstract character animation:** typographic tides, waveforms, soot, kaleidoscopes, interference patterns, frame tunnels and a text globe.
-- **New imagery for recurring lyrics:** rising text lanterns, endless stairs, a chart exceeding its axes and a lighting rig extinguishing lamp by lamp.
-- **Varied palettes and layouts:** monochrome, red, blue, full colour and pastel; questions, verdicts and repetition become visual material.
-- **Protected Chinese captions:** a caption strip kept clear of shake, flashes and glitches, plus bilingual Japanese/Chinese SRT export.
-- **Time-based rendering:** parallel encoding, resumable segment caches, still frames and contact sheets.
-
-[`pv/storyboard.py`](pv/storyboard.py) defines the active edit, primarily using `scenes5.py` through `scenes8.py`. Earlier room, character and street scenes remain in the source as reusable material; they are not a description of the entire final edit.
-
-### Quick start
-
-You need Python, NumPy, Pillow and FFmpeg / FFprobe on your command path. A Python 3.11 conda environment is recommended. Terminal playback with sound also requires FFplay.
-
-After cloning the repository and entering its directory:
-
-```bash
-conda create -n ascii-pv python=3.11 -y
-conda activate ascii-pv
-python -m pip install -r requirements.txt
-conda install -c conda-forge ffmpeg
-```
-
-Supply your own recording and line-timed lyrics in the project root, next to the Makefile:
-
-```text
-ヒトリエ - 日常と地球の額縁.flac
-ヒトリエ - 日常と地球の額縁.lrc
-```
-
-Check the inputs and render:
-
-```bash
-python tools/check_inputs.py
-python -m pv render --workers 4 --preset fast --out out/pv-final.mp4
-```
-
-The output contains H.264 video and stereo AAC audio, lasting approximately 3 minutes 46 seconds. Rendering time depends on your hardware and settings. The first run analyses the audio; reduce `--workers` if memory is limited.
-
-**This is a bespoke PV for one song and recording, not an automatic music-video generator for arbitrary songs.** The storyboard expects 65 lyric lines. A different recording or LRC may require changes to timing, captions and shot mapping.
-
-### Commands
-
-Run these from the project root in the activated environment:
-
-| Purpose | Command |
-|---|---|
-| Analyse audio | `python -m pv analyze` |
-| Print the storyboard | `python -m pv info` |
-| Low-resolution preview | `python -m pv render --scale 0.5 --workers 4 --out out/preview.mp4` |
-| Render a section | `python -m pv render --start 89.5 --end 112.5 --out out/chorus.mp4` |
-| Export stills at song times | `python -m pv still 52 94.6 173 216` |
-| Generate a contact sheet | `python -m pv sheet --every 5 --out out/contact-sheet.png` |
-| Play in the terminal | `python -m pv play --start 89.5` |
-| Export bilingual SRT | `python tools/export_subtitles.py` |
-| Check captions, boundaries and determinism | `python tools/check_redesign.py` |
-| Estimate full-frame luminance changes | `python tools/flash_check.py` |
-
-To specify input paths, place global options before the subcommand:
-
-```bash
-python -m pv --audio /path/to/song.flac --lrc /path/to/song.lrc render --out out/pv-final.mp4
-```
-
-Full renders are encoded in approximately 20-second chunks under `build/segments/`. Repeat the same command to reuse completed chunks after an interruption. Code, caption and setting changes generally produce a new cache. When replacing the recording, run `python -m pv analyze` first to refresh the audio analysis.
-
-Terminal playback needs space for at least 160 columns and 54 rows, plus 24-bit colour support. Generated files go under `out/`. The Makefile remains available, for example `make PY=python render`; conda users do not need `make setup`, which creates a separate virtual environment.
-
-### How it works
-
-1. **Audio analysis:** FFmpeg decodes the recording; NumPy extracts spectra, onset strength, frequency-band energy and beats.
-2. **Timeline and storyboard:** LRC timestamps identify sung lines; `storyboard.py` chooses the scene and its parameters.
-3. **Character drawing:** scene functions write glyphs and foreground/background colours into a grid using time and audio features.
-4. **Rasterisation:** a font atlas turns the grid into pixels, with glow, scanlines and other post-processing. The caption strip is protected from these effects.
-5. **Encoding:** worker processes generate frames; FFmpeg encodes them and muxes the recording. The terminal player instead emits ANSI true-colour text.
-
-Per-character lyric reveals are visual estimates from line timestamps, not manually aligned word timings. `flash_check.py` is an approximate luminance check, not a comprehensive photosensitivity certification. The visuals contain flashes and high-contrast cuts.
-
-### Editing and source layout
-
-| File / directory | Purpose |
-|---|---|
-| `pv/storyboard.py` | Active storyboard; `_line_shots()` maps lyrics to shots |
-| `pv/scenes5.py` through `pv/scenes8.py` | Main scenes used in the final edit |
-| `pv/abstract.py`, `pv/quiz.py` | Abstract fields, colour tools, questions and verdicts |
-| `pv/audio.py`, `pv/lrc.py`, `pv/timeline.py` | Audio features, lyric parsing and musical time |
-| `pv/canvas.py`, `pv/glyphs.py` | Character-grid drawing and font atlas |
-| `pv/lyricfx.py` | Lyric layout and animation |
-| `pv/raster.py`, `pv/render.py` | Post-processing, parallel rendering and encoding |
-| `pv/player.py` | Terminal playback |
-| `assets/fonts/` | Bundled fonts and their licenses |
-| `assets/earth_mask.txt` | Earth land mask |
-| `assets/subtitles.zh.json` | Ordered Japanese/Chinese caption pairs |
-| `tools/` | Checks, subtitle export and asset-generation utilities |
-
-Captions are an ordered list of `ja` and `zh` fields matching the LRC. Repeated Japanese lines may have different translations. The loader validates both line count and Japanese text, and reports mismatches. After edits, inspect stills or short clips before rendering the full video; rerun `tools/export_subtitles.py` to refresh the SRT.
-
-### Credits and distribution scope
-
-- **Song:** Hitorie, 日常と地球の額縁; words and music by wowaka. This is an unofficial fan project.
-- **Fonts:** [BIZ UDGothic](https://github.com/googlefonts/morisawa-biz-ud-gothic) and [Fusion Pixel](https://github.com/TakWolf/fusion-pixel-font). Their licenses are preserved in [`OFL.txt`](assets/fonts/OFL.txt) and [`OFL-FusionPixel.txt`](assets/fonts/OFL-FusionPixel.txt).
-- **Earth data:** public-domain land data from [Natural Earth](https://www.naturalearthdata.com/), rebuildable with `tools/make_earth_mask.py`.
-- **Visual references:** the locally supplied `world.execute(me).mp4` and the [11-person tribute PV](https://www.bilibili.com/video/BV1ZV4y1S7Q9). These informed composition and rhythm; the renderer does not require the reference videos.
-
-The recording, external LRC, reference videos, rendered videos and caches are excluded from source commits. Reference input checksums are recorded in [`inputs.sha256`](inputs.sha256). However, **`assets/subtitles.zh.json` contains the full Japanese lyrics and Chinese translations, and some scene code includes lyric excerpts**. The repository must therefore not be described as containing no lyrics. A code license does not automatically license the music, lyrics, translations or fonts on the same terms.
-
-**A source-code license has not yet been selected; this repository currently has no code LICENSE file.** Specify the code license and third-party content scope separately when publishing.
+完整范围说明见 [第三方内容与许可说明](NOTICE.md)。
