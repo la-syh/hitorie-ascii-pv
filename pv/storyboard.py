@@ -20,6 +20,7 @@ from . import scenes3 as s3
 from . import scenes4 as s4
 from . import scenes5 as s5
 from . import scenes6 as s6
+from . import scenes7 as s7
 from .timeline import Grid
 
 TITLE = "日常と地球の額縁"
@@ -65,8 +66,8 @@ def build(grid: Grid, duration: float, lyrics=None) -> list[Seg]:
             dict(zoom=D(37.2), ring=f"{ROMAJI} * HITORIE * WOWAKA * ")),
         # === every sung line below gets its own shot (see LINE_SHOTS)
         *line_segs,
-        # === guitar solo: frame tunnel + ring spectrum, then an everyday-object montage
-        Seg(D(112.4), 141.00, sc.solo_tunnel, dict(count0=D(125.2), count1=D(138.0), warp=D(139.6))),
+        # === guitar solo: abstract patterns change every two bars (every bar in the count), then burn out
+        Seg(D(112.4), 141.00, s7.z_solo, dict(count0=D(125.2), count1=D(138.0), warp=D(139.6))),
         # --- credits in the silence
         Seg(221.30, duration, sc.credits, dict(rows=[
             (TITLE, "title"),
@@ -108,60 +109,66 @@ def _line_shots(B):
         (s5.a_lie_of_truths, {}),       # 14 correct lie: 100% HAPPY commercial ticks TRUE
         (s5.a_cutouts, {}),          # 15 cut-out answers: scissors, scrapbook
         (s6.b_check_show, {}),        # 16 checking every day: day/night flip, calendar tears
-        # pre-chorus 1 -- the rooftop
-        (s3.v_distant, {}),         # 17 gone far away: last train's lights shrink
-        (s3.v_dusk, {}),            # 18 waited for the dark night: time-lapse dusk
-        (s3.v_nocolor, {}),         # 19 colour gone: neon street drains to grey
-        (s3.v_stagger, {}),         # 20 staggering on purpose: along the parapet, swaying
+        # pre-chorus 1 -- abstract: receding, night closing in, colour draining, staggering
+        (s7.z_recede, {}),          # 17 gone far away: text planes stream to a vanishing point
+        (s7.z_dark, {}),            # 18 waited for the dark night: a wall of 暗 closes in per beat
+        (s7.z_drain, {}),           # 19 suddenly the colour was gone: grey eats the hues outward
+        (s7.z_stagger, {}),         # 20 staggering on purpose: sheared type, tilting rules
         # pre-chorus 2
-        (s3.v_faraway, {}),         # 21 somewhere far: night highway, FAR AWAY sign
-        (s5.a_descent, {}),            # 22 just want to sink: phone sinks in the night sea
-        (s6.b_exam, {}),        # 23 don't know the answer: empty exam room
-        (s3.v_showroom, {"stop": 87.1}),   # 24 pointlessly pretty room; the stop
+        (s7.z_far, {}),             # 21 go somewhere far: a floor of light rushing to the horizon
+        (s5.a_descent, {}),         # 22 just want to sink: the water
+        (s6.b_exam, {}),            # 23 don't know the answer: exam cards, ✓ ✗ ✓ ✗ ?
+        (s7.z_room, {"stop": 87.1}),   # 24 pointlessly pretty room: sterile pastel symmetry; the stop
         # chorus 1
-        (s4.c_omikuji, {}),         # 25 mustn't expect: shrine fortune, 大凶
-        (s4.c_stage, {}),           # 26 a talent that hurts: the live house
-        (s4.c_spotlight, {"break": B(94.43)}),   # 27 smash the spotlight
-        (s4.c_ferris, {}),          # 28 up up high: the red gondola climbs
-        (s4.c_sphere, {}),          # 29 just a sphere: the route comes back home
-        (s4.c_crane, {}),           # 30 mustn't expect: the crane drops the prize
-        (s4.c_typing, {}),          # 31 an emotion that hurts: typing / deleting 'I'm fine'
-        (s4.c_crossing, {}),        # 32 the everyday's face is cold: snowy crossing
-        (s4.c_ferris, {"inside": True}),   # 33 how about up high: inside the gondola
-        (s4.c_traindoor, {}),       # 34 come on: the last train's doors open
+        (s7.z_quiz, {"skin": "big_red", "cards": [("期待しても？", "いい", "✗"),
+                                                  ("期待しない？", "しない", "✓")]}),  # 25 mustn't expect
+        (s7.z_shards, {}),          # 26 a talent that hurts: needles burst from 才能
+        (s7.z_spot, {"break": B(94.43)}),   # 27 smash the spotlight: the cone of 光 shatters
+        (s7.z_rise, {"pal": "sky"}),        # 28 up up high: tossed higher on every beat
+        (s7.z_sphere, {}),          # 29 no way out, just a sphere: the path returns to START
+        (s7.z_quiz, {"skin": "term", "title": "~/everyday $ expect",
+                     "cards": [("expect(tomorrow)", "false", "✓"),
+                               ("expect(you)", "true", "✗")]}),   # 30 mustn't expect
+        (s7.z_ecg, {"pal": "red"}),        # 31 an emotion that hurts?: the trace spikes too high
+        (s7.z_frost, {}),           # 32 the everyday's face is cold: frost over a face of 日常
+        (s7.z_rise, {"pal": "dusk"}),       # 33 how about up high
+        (s7.z_door, {}),            # 34 come on: the curtain of text parts, light
         # B section 2
-        (s4.b_rearview, {}),        # 35 gone far away: from the rear window
-        (s4.b_bench, {}),           # 36 waited for the dark night: empty platform
-        (s4.b_express, {}),         # 37 someone brushed past: an express blasts through
-        (s4.b_dodge, {}),           # 38 dodging on purpose: against the crowd
-        (s4.b_seaside, {}),         # 39 somewhere far: seaside line, lighthouse
-        (s4.b_futon, {}),           # 40 sleep alone: 3 a.m., the light goes out
-        (s4.b_rainwindow, {}),      # 41 that seems sad: rain on the window
-        (s4.b_underpass, {"brk": 164.0}),  # 42 bottom of a worn-out road: underpass
+        (s7.z_frames, {}),          # 35 gone far away: pulled back through picture frames
+        (s7.z_stars, {}),           # 36 waited for the dark night: star trails of 夜
+        (s7.z_graze, {}),           # 37 someone brushed past: two streams bend around each other
+        (s7.z_dodge, {}),           # 38 dodging on purpose: the rain parts around one point
+        (s7.z_sea, {}),             # 39 somewhere far: evening sea, the swell converging
+        (s7.z_breath, {}),          # 40 sleep all alone: one breathing glow, rings of z
+        (s7.z_rain, {}),            # 41 that looks sad: 悲 seen only through the rain
+        (s7.z_vortex, {"brk": 164.0}),  # 42 bottom of a worn-out road: spiral down; the break
         # chorus 2
-        (s4.c_gameover, {"n": 2}),  # 43 second failure
-        (s6.b_loss_show, {}),  # 44 expecting was a loss
-        (s4.c_register, {}),        # 45 only monotonous work: konbini register
-        (s4.c_laundromat, {}),      # 46 repeat it again: laundromat at 2 a.m.
-        (s4.c_loopline, {}),        # 47 no way out: loop line, next stop the same
-        (s4.c_cctv, {}),            # 48 you've noticed: security monitors turn to us
-        (s4.c_gameover, {"n": 3}),  # 49 third failure: CONTINUE? NO
-        (s4.c_lightswitch, {}),     # 50 want to stop expecting: switch OFF
-        (s4.c_crossing, {"peek": True}),   # 51 peeking at the everyday's face: blinds
-        (s4.c_balloon, {}),         # 52 how about up high: red balloon at dawn
-        (s4.c_traindoor, {"morning": True}),  # 53 come on
+        (s7.z_retry, {"n": 2}),     # 43 second failure: attempt bars, FAILED again
+        (s6.b_loss_show, {}),       # 44 expecting was a loss: ✗ then ✓
+        (s7.z_stamp, {}),           # 45 only monotonous work: the same stamp, over and over
+        (s7.z_droste, {}),          # 46 repeat it again: a Droste spiral of frames
+        (s7.z_maze, {}),            # 47 no way out: a maze without an exit
+        (s7.z_eye, {}),             # 48 you've noticed: the eye snaps to us
+        (s7.z_retry, {"n": 3, "paper": True}),   # 49 third failure
+        (s7.z_quiz, {"skin": "big", "cards": [("期待する？", "しない", "✓"),
+                                              ("ほんとに？", "……する", "✗")]}),  # 50 want to stop expecting
+        (s7.z_slats, {}),           # 51 peeking at the everyday's face: through the slats
+        (s7.z_rise, {"pal": "night"}),      # 52 how about up high
+        (s7.z_door, {"morning": True}),     # 53 come on
         # last chorus
-        (s4.c_omikuji, {"red": True}),     # 54 mustn't expect
-        (s4.c_stage, {}),           # 55 painful talent
-        (s4.c_spotlight, {"break": B(198.43)}),  # 56 smash the spotlight
-        (s4.c_ferris, {}),          # 57 up up high
-        (s4.c_loopline, {}),        # 58 no way out
-        (s4.c_sphere, {"pull": True}),     # 59 just a sphere: pull back into the frame
-        (s4.c_crane, {}),           # 60 mustn't expect
-        (s4.c_typing, {}),          # 61 painful emotion
-        (s4.c_crossing, {}),        # 62 the everyday's face is cold
-        (s4.c_ferris, {"inside": True}),   # 63 how about up high
-        (sh.finale_room, {"hold": 219.8, "hit": 221.0, "out": 221.12}),  # 64 come on -> the framed Earth
+        (s7.z_quiz, {"skin": "big_red", "cards": [("期待していい？", "だめ", "✓"),
+                                                  ("もう一度？", "いい", "✗")]}),  # 54 mustn't expect
+        (s7.z_shards, {"pal": "paper"}),    # 55 painful talent
+        (s7.z_spot, {"break": B(198.43)}),  # 56 smash the spotlight
+        (s7.z_rise, {"pal": "dawn"}),       # 57 up up high
+        (s7.z_maze, {"paper": True}),       # 58 no way out
+        (s7.z_sphere, {"pull": True}),      # 59 just a sphere: it shrinks into a frame
+        (s7.z_quiz, {"skin": "big", "cards": [("また期待した？", "した", "✗"),
+                                              ("もう期待しない？", "しない", "✓")]}),  # 60 mustn't expect
+        (s7.z_ecg, {"pal": "green"}),       # 61 painful emotion
+        (s7.z_frost, {"pal": "paper"}),     # 62 the everyday's face is cold
+        (s7.z_rise, {"pal": "red"}),        # 63 how about up high
+        (s7.z_finale, {"hold": 219.8, "hit": 221.0, "out": 221.12}),  # 64 come on -> the Earth, framed
     ]
 
 
@@ -182,4 +189,5 @@ def _line_segs(lyrics, D, B) -> list[Seg]:
 def text_chars() -> str:
     """All non-lyric text the storyboard may draw (for the glyph atlas)."""
     return TITLE + ROMAJI + ARTIST + CREDIT + "ASCII PV  /  unofficial fan work for wowaka" + \
-        "☎☂☀♨〒☁※♪♥★◆○◎↑←→×✓▲▶°℃笑ツ_\\" + "❄雪◯⌫▮●↻≡¥" + "→↗↑↖←↙↓↘◎≈°○✓✗●家本笑顔期待今日昨同はい答いいえ何処行正嘘とはしても私"+"嘘本当正解正しい答え日常最前線草四畳半" + "abcdefghijklmnopqrstuvwxyz"
+        "☎☂☀♨〒☁※♪♥★◆○◎↑←→×✓▲▶°℃笑ツ_\\" + "❄雪◯⌫▮●↻≡¥" + "→↗↑↖←↙↓↘◎≈°○✓✗●家本笑顔期待今日昨同はい答いいえ何処行正嘘とはしても私"+"嘘本当正解正しい答え日常最前線草四畳半" + \
+        "明曜遠くなったそれ暗夜を待色彩無フラつくわざ綺麗駄才能痛光逃げ道もよ冷顔額縁地球繰り返し済疲果て道底悲しそう人誰か一気づているのでしょう？……ほんとにだめもう度一ATEMPFLDSRGOHAL%=@#♥・" + "abcdefghijklmnopqrstuvwxyz"

@@ -11,6 +11,53 @@ render time.
 
 ---
 
+## Whole-video pass (abstract, line by line)
+
+The abstract / typographic style of the verses now runs through the whole
+video (`pv/scenes7.py`). Each shot keeps the literal meaning of its line, and
+neighbouring lines switch palette (ink, paper, red, blue, full colour,
+pastel). There are no flag-like motifs (no lone red disc on a white ground);
+the old model room and the red-ring stamp are gone.
+
+| Line | Shot |
+|---|---|
+| 遠くなった | text planes stream into a vanishing point; 遠 shrinks into the horizon |
+| 暗い暗い夜を待った | a wall of 暗 closes in on a dusk field of 夜, one step per beat |
+| ふと、色合い無くなった | a full-colour field drains to grey from the centre (色 → 無) |
+| わざわざフラつくんだ | フラつく set huge with every row sheared; the ruled lines tilt |
+| もう、遠いとこに行って | a violet floor of light rushes to the horizon |
+| 無駄に綺麗な部屋の中 | an empty, perfectly symmetric pastel room with a turning ornament; blackout at the stop |
+| 期待しちゃいけないよ | full-frame quiz cards (red / dark / terminal skins), mixed ○ × verdicts |
+| 痛いくらいの才能 | needles burst out of 才能 on every beat |
+| スポットライトぶっ壊して | a cone of 光 shatters on the hit |
+| 高い高い… | clouds and streaks rush down as a point is tossed higher each beat (five palettes) |
+| 逃げ道も無いよ…球面上 | a globe of text; a red path leaves START and returns to it (last time: it shrinks into a frame) |
+| 痛いくらいの感情？ | a heart monitor whose spikes outgrow the screen |
+| 日常の顔は冷たいなあ | a face of 日常 under creeping frost |
+| さ、おいでよ | a curtain of text parts on soft light — おいで |
+| Guitar solo | frame tunnel, kaleidoscope, spectral moiré and a text globe, every two bars, then a white burn-out |
+| B2: 遠くなった / 夜 / 擦れ違った / 躱して | a corridor of frames; star trails; two ribbons bowing around each other; rain parting round one point |
+| B2: 遠いとこ / 一人きり / 悲しそう / 道の底 | evening sea; a breathing glow; 悲 seen only through rain; a spiral road down to the break |
+| 二回目 / 三回目の失敗 | attempt bars, all failing at 99 % |
+| 単純作業 / 繰り返して | the same blue stamp, over and over; a Droste spiral |
+| 逃げ道は無いよ / 気づいているのでしょう | a maze with no exit; a huge eye that snaps to us |
+| 日常の顔を窺えば | a face glimpsed through blind slats |
+| Finale | a white void; the text globe shrinks inside a gilded ASCII frame — 日常と地球の額縁 |
+
+Quiz verdicts now alternate instead of running ✓✓✓ or ×××:
+
+- **where to go:** home ×, the sea ○, anywhere ×, null
+- **same as yesterday:** ○ × ○ ○ × ○
+- **exam:** ○ × ○ × ?
+- **expecting was a loss:** × then ○
+- **本当 stamps:** ○ × ○ ×
+
+Render this version:
+
+```bash
+python3 -m pv render --out out/pv-whole.mp4
+```
+
 ## Variety pass + question/answer lines
 
 Each verse line now has its own palette and grammar, so neighbouring lines
@@ -27,7 +74,7 @@ never look alike (`pv/scenes6.py`):
 - a spectral moiré
 - a paper grid ripped open by the red line
 - a red grin
-- 本当-of-嘘 judged ○ ○ × ×
+- 本当-of-嘘 judged ○ × ○ ×
 - the 嘘-of-正 stamp
 - cut-outs
 - a quiz show that keeps asking the same question
@@ -36,10 +83,10 @@ Lines about answers, truth and expectation play as beat-cut question →
 answer → verdict sequences (`pv/quiz.py`, in three skins: exam sheet,
 terminal, quiz show):
 
-- 何処に行けば (where should I go) — terminal: home ×, the sea ×, anywhere ×, null
-- 確かめるだけの毎日 (checking every day) — quiz show: "same as yesterday?" / "yes" / ✓, repeated faster
-- 答えわかんない (don't know the answer) — exam: four answers ×, the fifth only "?"
-- 期待したんが損 (expecting was a loss) — quiz show: "did you expect it?" / "YES" / ×
+- 何処に行けば (where should I go) — terminal: home ×, the sea ○, anywhere ×, null
+- 確かめるだけの毎日 (checking every day) — quiz show: "same as yesterday?" / "yes" / ○, with the odd ×, faster each time
+- 答えわかんない (don't know the answer) — exam: ○ × ○ ×, the fifth only "?"
+- 期待したんが損 (expecting was a loss) — quiz show: "did you expect it?" / "YES" / ×, then "again?" / "NO" / ○
 
 ## Abstract pass (verses 1–2 and the sinking)
 

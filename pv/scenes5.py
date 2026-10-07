@@ -415,16 +415,18 @@ def a_truth_of_lies(cv: Canvas, ctx: Ctx) -> Post:
 
 def a_lie_of_truths(cv: Canvas, ctx: Ctx) -> Post:
     """Even a correct lie.  The reverse: a huge 嘘 built of tiny 正 (correct),
-    paper-white, stamped with a red circle of approval."""
+    paper-white, stamped with a red square of approval."""
     cv.clear(PAPER, INK)
     A.text_fill(cv, cv.yy < P, "正", mix(PAPER, INK, 0.07))
     _word_of(cv, ctx, "嘘", "正正正", 40, INK)
     b = beats_in(ctx)
     if b >= 1:
         k = min(1.0, (b - 1) * 4)
-        r = 16 * (1.5 - 0.5 * k)
-        ring = Wd.disc(cv, 112, 30, r) & ~Wd.disc(cv, 112, 30, r - 2.2)
-        Wd.paint(cv, ring, RED2, "#", mix(RED2, PAPER, 0.3))
+        # square approval stamp (a red circle on white read as a flag)
+        w, h = 14 * (1.5 - 0.5 * k), 6 * (1.5 - 0.5 * k)
+        outer = Wd.rect(cv, 112 - w, 30 - h, 112 + w, 30 + h)
+        inner = Wd.rect(cv, 112 - w + 2, 30 - h + 1, 112 + w - 2, 30 + h - 1)
+        Wd.paint(cv, outer & ~inner, RED2, "#", mix(RED2, PAPER, 0.3))
         cv.put(108, 30, "正解", RED2, bold=True)
     return finish(cv, ctx, DAY, 0.8)
 

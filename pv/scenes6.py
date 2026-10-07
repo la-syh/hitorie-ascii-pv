@@ -95,8 +95,8 @@ def b_tide_paper(cv: Canvas, ctx: Ctx) -> Post:
 
 def b_where_quiz(cv: Canvas, ctx: Ctx) -> Post:
     """Where am I supposed to go?  A terminal asks; destinations are tried and
-    fail, faster and faster; the last returns null."""
-    cards = [("where_to_go", "home", "✗"), ("where_to_go", "the sea", "✗"),
+    pass or fail in turn, faster and faster; the last returns null."""
+    cards = [("where_to_go", "home", "✗"), ("where_to_go", "the sea", "✓"),
              ("where_to_go", "anywhere", "✗"), ("where_to_go", "null", "?")]
     hit, _ = Q.run(cv, ctx, cards, skin="term", beats_per_card=max(0.8, btot(ctx) / 4))
     return quiz_post(fin(cv, ctx, 0.4, glow=0.3), hit)
@@ -214,12 +214,12 @@ def b_grin_red(cv: Canvas, ctx: Ctx) -> Post:
 
 def b_truth_verdicts(cv: Canvas, ctx: Ctx) -> Post:
     """Even a mistaken truth.  本当 written in tiny 嘘 -- and a judge stamps it
-    each beat: ○, ○, ✗ … the last stamp cracks it in two."""
+    each beat: ○, ×, ○, × … it cannot decide, and the stamps crack it in two."""
     cv.clear(DEEP, PAPER)
     A.text_fill(cv, cv.yy < P, "嘘", mix(DEEP, PAPER, 0.08))
     _word_of(cv, ctx, "本当", "嘘嘘嘘", 34, PAPER)
     b = beats_in(ctx)
-    marks = ["○", "○", "×", "×"]
+    marks = ["○", "×", "○", "×"]
     i = min(len(marks) - 1, int(b))
     k = (b % 1) / 0.2
     col = hexc("#2fbf5a") if marks[i] == "○" else RED2
@@ -238,8 +238,11 @@ def b_truth_verdicts(cv: Canvas, ctx: Ctx) -> Post:
 
 def b_check_show(cv: Canvas, ctx: Ctx) -> Post:
     """Checking, every single day.  A quiz show that asks the same question
-    again and again -- 'same as yesterday?' -- 'yes' -- ✓ -- faster each time."""
-    cards = [("今日も昨日と同じ？", "はい", "✓")] * 8
+    again and again -- 'same as yesterday?' -- 'yes' ✓ -- with the odd slip ✗ --
+    faster each time."""
+    cards = [("今日も昨日と同じ？", "はい", "✓"), ("明日も今日と同じ？", "いいえ", "✗"),
+             ("今日も昨日と同じ？", "はい", "✓"), ("本当に同じ？", "はい", "✓"),
+             ("昨日は何曜日？", "……", "✗"), ("今日も昨日と同じ？", "はい", "✓")]
     hit, _ = Q.run(cv, ctx, cards, skin="show", beats_per_card=max(0.6, btot(ctx) / 6))
     return quiz_post(fin(cv, ctx, 0.4, glow=0.25), hit)
 
@@ -248,9 +251,9 @@ def b_check_show(cv: Canvas, ctx: Ctx) -> Post:
 
 def b_exam(cv: Canvas, ctx: Ctx) -> Post:
     """But I don't know the answer.  An exam sheet: question, answer, verdict
-    -- ✗, ✗, ✗ -- quicker each time, until the last answer is only '?'."""
-    cards = [("私は何処に行けば", "A. 家", "✗"), ("正しい嘘とは", "B. 本当", "✗"),
-             ("日常の顔は", "C. 笑顔", "✗"), ("期待しても", "D. いい", "✗"),
+    -- ✓, ✗, ✓, ✗ -- quicker each time, until the last answer is only '?'."""
+    cards = [("私は何処に行けば", "A. 遠いとこ", "✓"), ("正しい嘘とは", "B. 本当", "✗"),
+             ("日常の顔は", "C. 冷たい", "✓"), ("期待しても", "D. いい", "✗"),
              ("答えは", "?", "?")]
     hit, _ = Q.run(cv, ctx, cards, skin="exam", beats_per_card=btot(ctx) / 5)
     return quiz_post(fin_paper(cv, ctx, 0.3), hit)
@@ -258,8 +261,8 @@ def b_exam(cv: Canvas, ctx: Ctx) -> Post:
 
 def b_loss_show(cv: Canvas, ctx: Ctx) -> Post:
     """Expecting it was a loss.  Quiz show: 'Did you expect it?' -- 'YES' --
-    ✗, buzzer, the score drains."""
-    cards = [("期待した？", "YES", "✗"), ("また期待した？", "YES", "✗")]
+    ✗, buzzer, the score drains; 'Will you again?' -- 'NO' -- ✓."""
+    cards = [("期待した？", "YES", "✗"), ("また期待する？", "NO", "✓")]
     hit, _ = Q.run(cv, ctx, cards, skin="show", beats_per_card=btot(ctx) / 2)
     cv.put(120, 44, f"SCORE {max(0, 3000 - int(beats_in(ctx) * 900)):5d}", YEL, bold=True)
     return quiz_post(fin(cv, ctx, 0.6, glow=0.25), hit)

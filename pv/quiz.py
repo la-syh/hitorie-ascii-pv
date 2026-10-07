@@ -107,6 +107,32 @@ def run(cv: Canvas, ctx: Ctx, cards, skin="exam", beats_per_card=1.0, title=""):
         if ph >= 0.62:
             word = {"✓": "OK", "✗": "FAIL", "?": "NULL"}[v]
             stamp(cv, word, 104, 12, 10, vcol, vk)
+    elif skin in ("big", "big_red", "big_paper"):
+        # full-frame typography: question across the top, answer slammed in a
+        # band below, the verdict stamped over the right third.
+        bg, fg, band, bfg = {
+            "big": (hexc("#07070b"), PAPER, hexc("#1b1b22"), PAPER),
+            "big_red": (hexc("#d9261c"), PAPER, INK, PAPER),
+            "big_paper": (PAPER, INK, INK, PAPER),
+        }[skin]
+        cv.clear(bg, fg)
+        cv.put(3, 1, title or f"Q.{i + 1:02d}", mix(bg, fg, 0.55), bold=True)
+        qs = _typed(q, qk) or " "
+        rows = 13 if len(q) <= 7 else 10
+        bmp = cv.text_bitmap(qs, rows, True)
+        cv.shape_field(bmp, int(80 - cv.text_bitmap(q, rows, True).shape[1] / 2), 3, fg)
+        y0 = 22
+        slide = 1 - min(1.0, max(0.0, ak * 2.5))
+        Wd.fill_rect(cv, int(-160 * slide), y0, int(160 - 160 * slide), y0 + 15, band, " ")
+        if ph >= 0.3:
+            bm = cv.text_bitmap(_typed(a, ak) or " ", 11, True)
+            cv.shape_field(bm, 10, y0 + 2, bfg if not (ph >= 0.62) else mix(bfg, vcol, 0.6))
+        for j in range(i + (1 if ph >= 0.62 else 0)):
+            vv = cards[j][2]
+            cv.put(4 + j * 4, 41, "×" if vv == "✗" else ("○" if vv == "✓" else "?"),
+                   GREEN if vv == "✓" else (RED2 if vv == "✗" else GREY), bold=True)
+        if ph >= 0.62:
+            stamp(cv, "×" if v == "✗" else ("○" if v == "✓" else "?"), 128, 28, 20, vcol, vk)
     else:  # show
         cv.clear(hexc("#120406"), PAPER)
         for k in range(0, 160, 4):
