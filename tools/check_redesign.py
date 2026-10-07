@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from pv.render import PV, find_inputs
 
 pv = PV(*find_inputs(), scale=.5)
-assert all(ln.text in pv.translations for ln in pv.lyrics.lines)
+assert all(ln.t in pv.translations for ln in pv.lyrics.lines)
 # The fallback's missing glyph must not silently appear in Chinese captions.
 missing = bytes(pv.atlas.zh_font.getmask(chr(0x10ffff)))
 for ch in pv.atlas.zh_chars:

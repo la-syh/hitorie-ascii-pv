@@ -52,6 +52,26 @@ def load_analysis(audio: Path, fps: float, force: bool = False) -> Analysis:
     return an
 
 
+def load_translations(lyrics) -> dict:
+    """Chinese captions, one per sung line, in LRC order.
+
+    assets/subtitles.zh.json is a list of {"ja", "zh"}; repeated Japanese
+    lines can have different translations, so captions are matched by
+    position (and checked against the Japanese text), keyed by line start."""
+    import re
+    rows = json.loads((ROOT / "assets/subtitles.zh.json").read_text(encoding="utf-8"))
+    lines = lyrics.lines
+    if len(rows) != len(lines):
+        raise ValueError(f"subtitles.zh.json has {len(rows)} lines, the .lrc has {len(lines)}")
+    norm = lambda x: re.sub(r"\s", "", x)
+    out = {}
+    for i, (row, ln) in enumerate(zip(rows, lines)):
+        if norm(row["ja"]) != norm(ln.text):
+            raise ValueError(f"subtitle line {i}: {row['ja']!r} does not match the .lrc line {ln.text!r}")
+        out[ln.t] = row["zh"]
+    return out
+
+
 class PV:
     def __init__(self, audio: Path, lrc: Path, fps: float = 30.0, scale: float = 1.0):
         self.fps = fps
@@ -61,7 +81,7 @@ class PV:
         self.segs = build(self.grid, self.an.duration, self.lyrics)
         cw, ch = max(2, int(round(12 * scale))), max(4, int(round(20 * scale)))
         self.atlas = Atlas(cw, ch, max(4, int(round(22 * scale))))
-        self.translations = json.loads((ROOT / "assets/subtitles.zh.json").read_text())
+        self.translations = load_translations(self.lyrics)
         self.atlas.zh_chars = set("".join(self.translations.values())) - self.lyrics.chars()
         self.atlas.ensure("".join(self.translations.values()))
         self.atlas.ensure("".join(self.lyrics.chars()) + text_chars(), bold=False)
@@ -92,10 +112,10 @@ class PV:
             post.chroma = max(post.chroma, 4)
         # A stable caption strip, added after all character-level tearing.
         ln = self.lyrics.at(t)
-        if ln and ln.text in self.translations:
+        if ln and ln.t in self.translations:
             self.cv.ch[51:54] = 0
             self.cv.bg[51:54] = (.025,.025,.03)
-            self.cv.put_center(52, self.translations[ln.text], (.94,.91,.84))
+            self.cv.put_center(52, self.translations[ln.t], (.94,.91,.84))
         return post
 
     def frame(self, frame: int) -> np.ndarray:

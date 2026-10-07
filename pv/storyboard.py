@@ -21,6 +21,7 @@ from . import scenes4 as s4
 from . import scenes5 as s5
 from . import scenes6 as s6
 from . import scenes7 as s7
+from . import scenes8 as s8
 from .timeline import Grid
 
 TITLE = "日常と地球の額縁"
@@ -131,7 +132,7 @@ def _line_shots(B):
                                ("expect(you)", "true", "✗")]}),   # 30 mustn't expect
         (s7.z_ecg, {"pal": "red"}),        # 31 an emotion that hurts?: the trace spikes too high
         (s7.z_frost, {}),           # 32 the everyday's face is cold: frost over a face of 日常
-        (s7.z_rise, {"pal": "dusk"}),       # 33 how about up high
+        (s8.y_lanterns, {}),        # 33 how about up high: the line's characters float up like lanterns
         (s7.z_door, {}),            # 34 come on: the curtain of text parts, light
         # B section 2
         (s7.z_frames, {}),          # 35 gone far away: pulled back through picture frames
@@ -153,21 +154,19 @@ def _line_shots(B):
         (s7.z_quiz, {"skin": "big", "cards": [("期待する？", "しない", "✓"),
                                               ("ほんとに？", "……する", "✗")]}),  # 50 want to stop expecting
         (s7.z_slats, {}),           # 51 peeking at the everyday's face: through the slats
-        (s7.z_rise, {"pal": "night"}),      # 52 how about up high
-        (s7.z_door, {"morning": True}),     # 53 come on
-        # last chorus
-        (s7.z_quiz, {"skin": "big_red", "cards": [("期待していい？", "だめ", "✓"),
-                                                  ("もう一度？", "いい", "✗")]}),  # 54 mustn't expect
-        (s7.z_shards, {"pal": "paper"}),    # 55 painful talent
-        (s7.z_spot, {"break": B(198.43)}),  # 56 smash the spotlight
-        (s7.z_rise, {"pal": "dawn"}),       # 57 up up high
-        (s7.z_maze, {"paper": True}),       # 58 no way out
-        (s7.z_sphere, {"pull": True}),      # 59 just a sphere: it shrinks into a frame
-        (s7.z_quiz, {"skin": "big", "cards": [("また期待した？", "した", "✗"),
-                                              ("もう期待しない？", "しない", "✓")]}),  # 60 mustn't expect
-        (s7.z_ecg, {"pal": "green"}),       # 61 painful emotion
-        (s7.z_frost, {"pal": "paper"}),     # 62 the everyday's face is cold
-        (s7.z_rise, {"pal": "red"}),        # 63 how about up high
+        (s8.y_stairs, {}),          # 52 how about up high: an endless staircase
+        (s8.y_path, {}),            # 53 come on: a path of lights toward the dawn horizon
+        # last chorus -- same words as chorus 1, new pictures (no shot is reused)
+        (s8.y_pop, {}),             # 54 mustn't expect: a balloon of 期待 swells and pops
+        (s8.y_meter, {}),           # 55 painful talent: level meters driven into the red
+        (s8.y_rig, {"break": B(198.43)}),  # 56 smash the spotlight: the lamps blow out
+        (s8.y_chart, {}),           # 57 up up high: a chart that keeps leaving its own axis
+        (s8.y_exits, {}),           # 58 no way out: every EXIT points back inside
+        (s8.y_wrap, {}),            # 59 just a sphere: a flat map whose edges meet
+        (s8.y_lines, {}),           # 60 mustn't expect: 期待しない。 written out as punishment
+        (s8.y_thermal, {}),         # 61 painful emotion: 感情 on a thermal camera
+        (s8.y_faces, {}),           # 62 the everyday's face is cold: a wall of blank faces turns to us
+        (s8.y_citydrop, {}),        # 63 how about up high: the city falls away below
         (s7.z_finale, {"hold": 219.8, "hit": 221.0, "out": 221.12}),  # 64 come on -> the Earth, framed
     ]
 
@@ -190,4 +189,5 @@ def text_chars() -> str:
     """All non-lyric text the storyboard may draw (for the glyph atlas)."""
     return TITLE + ROMAJI + ARTIST + CREDIT + "ASCII PV  /  unofficial fan work for wowaka" + \
         "☎☂☀♨〒☁※♪♥★◆○◎↑←→×✓▲▶°℃笑ツ_\\" + "❄雪◯⌫▮●↻≡¥" + "→↗↑↖←↙↓↘◎≈°○✓✗●家本笑顔期待今日昨同はい答いいえ何処行正嘘とはしても私"+"嘘本当正解正しい答え日常最前線草四畳半" + \
+        "パン非常口出無EXIT℃×ここ=→←↑↓(・_)STEPSCALE^ALT" + \
         "明曜遠くなったそれ暗夜を待色彩無フラつくわざ綺麗駄才能痛光逃げ道もよ冷顔額縁地球繰り返し済疲果て道底悲しそう人誰か一気づているのでしょう？……ほんとにだめもう度一ATEMPFLDSRGOHAL%=@#♥・" + "abcdefghijklmnopqrstuvwxyz"

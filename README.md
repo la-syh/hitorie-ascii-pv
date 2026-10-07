@@ -11,6 +11,34 @@ render time.
 
 ---
 
+## No-repeat pass + new Chinese captions
+
+**Repeated lyrics, new pictures.** The last chorus has the same words as the
+first, and 高い高い (five times) and さ、おいでよ (three) keep coming back.
+Each recurrence now gets its own shot (`pv/scenes8.py`):
+
+| Line (recurrence) | First time | Now |
+|---|---|---|
+| 高い高いはどうだい (chorus 1) | tossed point | lanterns of text float up |
+| 高い高いもどうだい (chorus 2) | tossed point | an endless staircase |
+| さ、おいでよ (chorus 2) | curtain parts | a path of lights toward the dawn |
+| 期待しちゃいけないよ (last ×2) | quiz cards | a balloon of 期待 pops / 期待しない。 written out as punishment, the last slips |
+| 痛いくらいの才能 | needles | level meters driven into CLIP |
+| スポットライトぶっ壊して | cone shatters | a rig of lamps blows out one by one |
+| 高い高いでどうだい / はどうだい | tossed point | a chart that outgrows its axis / the city falls away below |
+| 逃げ道も無いよ | maze | every EXIT sign points back inside |
+| ここはただの球面上 | text globe | a flat map whose edges meet |
+| 痛いくらいの感情 | heart monitor | thermal camera |
+| 日常の顔は冷たいなあ | frost face | a wall of blank faces turns to us |
+
+**Chinese captions.** `assets/subtitles.zh.json` is now a list of
+`{"ja", "zh"}` in LRC order, so repeated Japanese lines can be translated
+differently. `pv.render.load_translations` checks every row against the
+.lrc text and fails loudly on a mismatch. `tools/export_subtitles.py`
+writes `out/subtitles.zh.srt` from the same data.
+
+Render: `python3 -m pv render --out out/pv-final.mp4`
+
 ## Whole-video pass (abstract, line by line)
 
 The abstract / typographic style of the verses now runs through the whole
