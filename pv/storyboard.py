@@ -19,6 +19,7 @@ from . import scenes2 as s2
 from . import scenes3 as s3
 from . import scenes4 as s4
 from . import scenes5 as s5
+from . import scenes6 as s6
 from .timeline import Grid
 
 TITLE = "日常と地球の額縁"
@@ -90,23 +91,23 @@ def _line_shots(B):
     return [
         # verse 1 -- her room at night, then out to the station and the last train
         (s5.a_message, {}),         # 0  answering-machine service: PLAY is pressed in the dark room
-        (s5.a_lowfreq, {}),         # 1  recorded low hum: speaker throbs, rings in the tea
-        (s5.a_frontline, {}),       # 2  front line of everyday: rush-hour platform, red line
-        (s5.a_flow, {}),           # 3  where should I go?: departure board can't settle
+        (s6.b_oscillo, {}),         # 1  recorded low hum: speaker throbs, rings in the tea
+        (s6.b_tide_paper, {}),       # 2  front line of everyday: rush-hour platform, red line
+        (s6.b_where_quiz, {}),           # 3  where should I go?: departure board can't settle
         (s5.a_stockpile, {}),           # 4  jokes kept to herself: corkboard fills with notes
         (s5.a_burst, {}),            # 5  spat out at once: the notes stream out the window
         (s5.a_freeze, {}),           # 6  well, yeah: sitcom shrug on the TV, cat asleep on it
-        (s5.a_timeriver, {}),         # 7  not stopping even now: inside the last train
-        (s5.a_kaleido, {}),        # 8  everything changes: the train windows flick scenery
+        (s6.b_bigclock, {}),         # 7  not stopping even now: inside the last train
+        (s6.b_kaleido_color, {}),        # 8  everything changes: the train windows flick scenery
         # verse 2 -- the flat, the street, the store window, the desk
         (s5.a_soot, {}),           # 9  sooty four-and-a-half mats: laundry, boxes, dust
-        (s5.a_interference, {}),      # 10 the ultrasound she brought: only the cat hears it
-        (s5.a_lattice, {}),          # 11 ran from the everyday: window goes dark, down the stairs
-        (s5.a_mouth, {}),           # 12 you'll laugh at me: the group chat floods with www
-        (s5.a_truth_of_lies, {}),     # 13 mistaken truth: TV wall news gets a CORRECTION
+        (s6.b_moire_color, {}),      # 10 the ultrasound she brought: only the cat hears it
+        (s6.b_lattice_paper, {}),          # 11 ran from the everyday: window goes dark, down the stairs
+        (s6.b_grin_red, {}),           # 12 you'll laugh at me: the group chat floods with www
+        (s6.b_truth_verdicts, {}),     # 13 mistaken truth: TV wall news gets a CORRECTION
         (s5.a_lie_of_truths, {}),       # 14 correct lie: 100% HAPPY commercial ticks TRUE
         (s5.a_cutouts, {}),          # 15 cut-out answers: scissors, scrapbook
-        (s5.a_ticks, {}),        # 16 checking every day: day/night flip, calendar tears
+        (s6.b_check_show, {}),        # 16 checking every day: day/night flip, calendar tears
         # pre-chorus 1 -- the rooftop
         (s3.v_distant, {}),         # 17 gone far away: last train's lights shrink
         (s3.v_dusk, {}),            # 18 waited for the dark night: time-lapse dusk
@@ -115,7 +116,7 @@ def _line_shots(B):
         # pre-chorus 2
         (s3.v_faraway, {}),         # 21 somewhere far: night highway, FAR AWAY sign
         (s5.a_descent, {}),            # 22 just want to sink: phone sinks in the night sea
-        (s3.v_noanswer, {}),        # 23 don't know the answer: empty exam room
+        (s6.b_exam, {}),        # 23 don't know the answer: empty exam room
         (s3.v_showroom, {"stop": 87.1}),   # 24 pointlessly pretty room; the stop
         # chorus 1
         (s4.c_omikuji, {}),         # 25 mustn't expect: shrine fortune, 大凶
@@ -139,7 +140,7 @@ def _line_shots(B):
         (s4.b_underpass, {"brk": 164.0}),  # 42 bottom of a worn-out road: underpass
         # chorus 2
         (s4.c_gameover, {"n": 2}),  # 43 second failure
-        (s4.c_crane, {"drop_early": True}),  # 44 expecting was a loss
+        (s6.b_loss_show, {}),  # 44 expecting was a loss
         (s4.c_register, {}),        # 45 only monotonous work: konbini register
         (s4.c_laundromat, {}),      # 46 repeat it again: laundromat at 2 a.m.
         (s4.c_loopline, {}),        # 47 no way out: loop line, next stop the same
@@ -181,4 +182,4 @@ def _line_segs(lyrics, D, B) -> list[Seg]:
 def text_chars() -> str:
     """All non-lyric text the storyboard may draw (for the glyph atlas)."""
     return TITLE + ROMAJI + ARTIST + CREDIT + "ASCII PV  /  unofficial fan work for wowaka" + \
-        "☎☂☀♨〒☁※♪♥★◆○◎↑←→×✓▲▶°℃笑ツ_\\" + "❄雪◯⌫▮●↻≡¥" + "→↗↑↖←↙↓↘◎≈°嘘本当正解正しい答え日常最前線草四畳半" + "abcdefghijklmnopqrstuvwxyz"
+        "☎☂☀♨〒☁※♪♥★◆○◎↑←→×✓▲▶°℃笑ツ_\\" + "❄雪◯⌫▮●↻≡¥" + "→↗↑↖←↙↓↘◎≈°○✓✗●家本笑顔期待今日昨同はい答いいえ何処行正嘘とはしても私"+"嘘本当正解正しい答え日常最前線草四畳半" + "abcdefghijklmnopqrstuvwxyz"

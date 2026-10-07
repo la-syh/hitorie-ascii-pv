@@ -11,6 +11,36 @@ render time.
 
 ---
 
+## Variety pass + question/answer lines
+
+Each verse line now has its own palette and grammar, so neighbouring lines
+never look alike (`pv/scenes6.py`):
+
+- message spiral (black)
+- a giant black oscillograph on red
+- an ink tide of 日常 against a red line on paper
+- a terminal quiz (black)
+- the laughter dune (black), its red burst and paper freeze
+- a huge stopwatch on paper
+- a full-colour kaleidoscope
+- soot
+- a spectral moiré
+- a paper grid ripped open by the red line
+- a red grin
+- 本当-of-嘘 judged ○ ○ × ×
+- the 嘘-of-正 stamp
+- cut-outs
+- a quiz show that keeps asking the same question
+
+Lines about answers, truth and expectation play as beat-cut question →
+answer → verdict sequences (`pv/quiz.py`, in three skins: exam sheet,
+terminal, quiz show):
+
+- 何処に行けば (where should I go) — terminal: home ×, the sea ×, anywhere ×, null
+- 確かめるだけの毎日 (checking every day) — quiz show: "same as yesterday?" / "yes" / ✓, repeated faster
+- 答えわかんない (don't know the answer) — exam: four answers ×, the fifth only "?"
+- 期待したんが損 (expecting was a loss) — quiz show: "did you expect it?" / "YES" / ×
+
 ## Abstract pass (verses 1–2 and the sinking)
 
 The two verses (lines 0–16) and the "sink" line (22) are no longer pictures
